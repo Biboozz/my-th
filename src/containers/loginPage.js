@@ -15,11 +15,6 @@ import {connect} from "react-redux";
 
 class LoginPage extends Component {
 
-
-    constructor(props) {
-        super(props);
-    }
-
     redirect_to_next = () => {
         const values = queryString.parse(this.props.location.search);
         this.props.history.push(values.next ? values.next : "/");

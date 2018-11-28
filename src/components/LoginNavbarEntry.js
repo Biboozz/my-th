@@ -1,6 +1,5 @@
 import React from "react";
-import {NavItem, NavLink, Popover, PopoverBody, PopoverHeader} from "reactstrap";
-import LoginForm from "./loginForm";
+import {NavItem} from "reactstrap";
 import {urls} from "../config";
 import {Link} from "react-router-dom";
 

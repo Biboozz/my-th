@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import FeatureGeneric from "./featureGeneric";
 
 import "../../styles/features.css"
-
-import {Button} from "reactstrap";
 import "../../styles/bigRoundButton.css"
 import BigButton from "../../components/bigButton";
 import {Link} from "react-router-dom";

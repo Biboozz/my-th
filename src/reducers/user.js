@@ -22,7 +22,6 @@ export default function userReducer(state = defaultState, action) {
         default:
             return state;
     }
-    return state;
 }
 
 export function stateToUserProps(state) {

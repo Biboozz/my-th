@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Separator from "../../components/separator";
 
 import "../../styles/features.css"
-import BigButton from "../../components/bigButton";
 
 export default class FeatureGeneric extends Component {
     render() {
