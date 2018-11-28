@@ -3,10 +3,7 @@ import {Route, Switch} from "react-router-dom";
 import PropTypes from 'prop-types';
 
 import e404 from "../e404";
-import CreateCampaign from "./CreateCampaign";
-import ManageCampaign from "./ManageCampaign";
 import ManageCampaignHome from "./ManageCampaignHome";
-import {CampaignStartList} from "../../classes/Campaign";
 
 class Routes extends Component {
     render() {
@@ -14,9 +11,9 @@ class Routes extends Component {
             <div>
                 <Switch>
                     <Route exact path={`${this.props.match.url}/`} component={ManageCampaignHome}/>
-                    <Route exact path={`${this.props.match.url}/create`} component={CreateCampaign}/>
-                    <Route exact path={`${this.props.match.url}/:campaignId`}
-                           render={(props) => <ManageCampaign {...props} campaignsList={CampaignStartList} />}/>
+                    {/*<Route exact path={`${this.props.match.url}/create`} component={CreateCampaign}/>*/}
+                    {/*<Route exact path={`${this.props.match.url}/:campaignId`}*/}
+                    {/*render={(props) => <ManageCampaign {...props} campaignsList={CampaignStartList} />}/>*/}
                     <Route component={e404}/>
                 </Switch>
             </div>
