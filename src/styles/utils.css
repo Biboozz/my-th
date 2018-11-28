@@ -40,3 +40,18 @@ div.vr {
     height: 100%;
     background-image: linear-gradient(to top, rgba(0, 0, 0, 0), #bfbfbf, rgba(0, 0, 0, 0));
 }
+
+.greenBtn {
+    background: #98be5d;
+    color: #ffffff;
+    border: none;
+}
+
+.greenBtn:hover {
+    background: #8aac54;
+}
+
+.greenBtn:active {
+    background: #60783b;
+    border-color: transparent !important;
+}

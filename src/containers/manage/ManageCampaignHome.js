@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
 import {Icon} from '@mdi/react'
-import {mdiWorker} from "@mdi/js";
+import {mdiPlus, mdiWorker} from "@mdi/js";
+import {Container} from "reactstrap";
+
+import {CampaignStartList} from "../../classes/Campaign";
+import ListCampaigns from "./List Campaigns";
+import FloatingButtonAction from "../../components/FloatingButtonAction";
 
 import "../../styles/utils.css"
-import ListCampaigns from "./List Campaigns";
-import {CampaignStartList} from "../../classes/Campaign";
-import {Container} from "reactstrap";
+import {Link} from "react-router-dom";
 
 class ManageCampaignHome extends Component {
     render() {
         return (
-            <Container id="manageHome" style={{marginTop: "2em"}}>
-                <ListCampaigns list={CampaignStartList}/>
-                <div>
+            <div>
+                <Container id="manageHome" style={{marginTop: "2em"}}>
+                    <ListCampaigns list={CampaignStartList}/>
                     <div className="test_text" style={{paddingTop: "100px"}}>
                         <h1>Work in progress</h1>
                         <ul style={{listStyleType: 'none', padding: 0}}>
@@ -23,8 +26,13 @@ class ManageCampaignHome extends Component {
                         </ul>
                         <Icon path={mdiWorker} size={4} color="#999" style={{opacity: 0.2}}/>
                     </div>
-                </div>
-            </Container>
+                </Container>
+                <Link to={"manage/create"}>
+                    <FloatingButtonAction className={"greenBtn"}>
+                        <Icon path={mdiPlus} size={1}/>
+                    </FloatingButtonAction>
+                </Link>
+            </div>
         );
     }
 }

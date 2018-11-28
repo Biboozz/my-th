@@ -12,6 +12,13 @@
     box-shadow: none !important;
 
     position: fixed;
-    bottom: 5em;
-    right: 5em;
+    bottom: 5rem;
+    right: 5rem;
+}
+
+@media (max-width: 800px) {
+    .FloatingActionButton {
+        bottom: 1rem;
+        right: 1rem;
+    }
 }
