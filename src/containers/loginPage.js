@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
 import Background from "../components/Background";
-import {Col, Container, Row} from "reactstrap";
+import {Button, Container, Row} from "reactstrap";
 import {Icon} from '@mdi/react'
 import {mdiFacebook} from '@mdi/js'
 
-import "../styles/loginRedirection.css"
+import "../styles/loginPage.css"
 import "../styles/bigRoundButton.css"
-
-import ButtonSpinable from "../components/ButtonSpinable";
-import {Button} from "reactstrap";
 import {Link, withRouter} from "react-router-dom";
 import LoginButton from "../components/LoginButton";
 import queryString from 'query-string'
@@ -16,7 +13,7 @@ import {stateToUserProps} from "../reducers/user";
 import {connect} from "react-redux";
 
 
-class LoginRedirection extends Component {
+class LoginPage extends Component {
 
 
     constructor(props) {
@@ -66,4 +63,4 @@ class LoginRedirection extends Component {
     }
 }
 
-export default withRouter(connect(stateToUserProps)(LoginRedirection));
+export default withRouter(connect(stateToUserProps)(LoginPage));
