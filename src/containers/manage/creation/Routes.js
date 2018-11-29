@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import e404 from "../../e404";
 import CampaignCreationStep1 from "./step1";
+import CampaignCreationStep2 from "./step2";
 
 class Routes extends Component {
     render() {
@@ -13,6 +14,7 @@ class Routes extends Component {
                 <Switch>
                     <Route exact path={`${this.props.match.url}/`} component={CampaignCreationStep1}/>
                     <Route exact path={`${this.props.match.url}/step1`} component={CampaignCreationStep1}/>
+                    <Route exact path={`${this.props.match.url}/step2`} component={CampaignCreationStep2}/>
                     <Route component={e404}/>
                 </Switch>
             </div>

@@ -4,8 +4,9 @@ import {Button, Col, Row} from "reactstrap";
 import {Icon} from '@mdi/react'
 import {mdiSkipNext} from '@mdi/js'
 
-import '../../../styles/campaignCreation/step1.css'
+import '../../../styles/campaignCreation/global.css'
 import '../../../styles/utils.css'
+import {Link} from "react-router-dom";
 
 
 class CampaignCreationStep1 extends Component {
@@ -88,10 +89,12 @@ class CampaignCreationStep1 extends Component {
                     </Row>
                 </div>
                 <div>
-                    <Button className={"NextButton"} disabled={!(this.state.experience && this.state.game)}>
-                        Next
-                        <Icon path={mdiSkipNext} size={1}/>
-                    </Button>
+                    <Link to={"create/step2"}>
+                        <Button className={"NavigationButton NextButton"} disabled={!(this.state.experience && this.state.game)}>
+                            Next
+                            <Icon path={mdiSkipNext} size={1}/>
+                        </Button>
+                    </Link>
                 </div>
             </div>
         );

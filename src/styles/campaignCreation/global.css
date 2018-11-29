@@ -34,12 +34,20 @@ div > .TitleCenterWrapper {
     margin: 1em;
 }
 
-.NextButton {
-    float: right;
+
+.NavigationButton {
     visibility: visible;
     border: none;
     border-color: transparent !important;
     box-shadow: none !important;
+}
+
+.NavigationButton:disabled {
+    visibility: hidden;
+}
+
+.NextButton {
+    float: right !important;
 }
 
 .NextButton > svg {
@@ -48,6 +56,18 @@ div > .TitleCenterWrapper {
 }
 
 
-.NextButton:disabled {
-    visibility: hidden;
+.BackButton {
+    float: left !important;
+    align-self: start;
+}
+
+.BackButton > svg {
+    float: left;
+    margin: auto .5em auto auto;
+}
+
+.NavButtonsWrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
