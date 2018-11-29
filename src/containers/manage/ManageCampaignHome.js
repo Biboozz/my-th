@@ -27,7 +27,7 @@ class ManageCampaignHome extends Component {
                         <Icon path={mdiWorker} size={4} color="#999" style={{opacity: 0.2}}/>
                     </div>
                 </Container>
-                <Link to={"manage/create"}>
+                <Link to={"manage/create/step1"}>
                     <FloatingButtonAction className={"greenBtn"}>
                         <Icon path={mdiPlus} size={1}/>
                     </FloatingButtonAction>

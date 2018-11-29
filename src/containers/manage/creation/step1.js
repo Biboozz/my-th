@@ -90,7 +90,7 @@ class CampaignCreationStep1 extends Component {
                     </Row>
                 </div>
                 <div>
-                    <Link to={`{this.pro}`}>
+                    <Link to={`step2`}>
                         <Button className={"NavigationButton NextButton"} disabled={!(this.state.experience && this.state.game)}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>
