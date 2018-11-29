@@ -1,0 +1,38 @@
+.CampaignCreationCategory > span {
+    font-weight: bolder;
+    color: #383838;
+    font-size: x-large;
+}
+
+.CampaignCreationCategory > div {
+    background: #a0be66;
+    width: 100%;
+    display: flex;
+    min-height: 3em;
+    align-items: center;
+    border-radius: 1em;
+}
+
+.CampaignCreationCategory > div > span {
+    margin: 1em;
+    font-size: larger;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+@media (max-width: 800px) {
+    .CampaignCreationCategory > div > span {
+        margin: 1em;
+        font-size: medium;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    form > .row {
+        margin: 1.5em auto;
+    }
+
+    #gameTypeSelect {
+        font-size: small;
+    }
+}

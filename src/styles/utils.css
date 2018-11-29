@@ -44,7 +44,8 @@ div.vr {
 .greenBtn {
     background: #98be5d;
     color: #ffffff;
-    border: none;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 .greenBtn:hover {

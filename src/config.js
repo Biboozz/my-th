@@ -20,3 +20,5 @@ export const urls = {
     },
     loginUrl: '/login'
 };
+
+export const botNameMaxLength = 50;
