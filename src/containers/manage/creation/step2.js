@@ -23,8 +23,15 @@ class CampaignCreationStep2 extends Component {
         }
     }
 
+    updatePrefill = (event) => {
+        let newPrefill = Object.assign({}, this.state.prefill);
+        newPrefill[event.target.id] = event.target.value;
+        this.setState({prefill: newPrefill});
+    };
+
     handleBotNameChange = (event) => {
-        this.setState({botNameHelpText: `${event.target.value.length}/${botNameMaxLength}`})
+        this.setState({botNameHelpText: `${event.target.value.length}/${botNameMaxLength}`});
+        this.updatePrefill(event);
     };
 
     render() {
@@ -36,27 +43,28 @@ class CampaignCreationStep2 extends Component {
                             <FormGroup>
                                 <Label for="botName">Your fun bot name</Label>
                                 <Input id="botName" placeholder="Name" maxLength={50}
-                                       onChange={this.handleBotNameChange}/>
+                                       onChange={this.handleBotNameChange} value={this.state.prefill.botName}/>
                                 <FormText>{this.state.botNameHelpText}</FormText>
                             </FormGroup>
                         </Col>
                         <Col xs={12} sm={6}>
                             <Row>
                                 <Col xs={6}>
-                                    <Label for="gameTypeSelect">Experience</Label>
-                                    <Input type="select" id="gameTypeSelect" disabled>
-                                        <option selected>Sweepstake</option>
-                                        <option>Instant win</option>
-                                        <option>Race</option>
+                                    <Label for="gameType">Experience</Label>
+                                    <Input type="select" id="gameType" disabled
+                                           defaultValue={this.state.prefill.experience}>
+                                        <option value={"sweepstake"}>Sweepstake</option>
+                                        <option value={"instantwin"}>Instant win</option>
+                                        <option value={"race"}>Race</option>
                                     </Input>
                                 </Col>
                                 <Col xs={6}>
-                                    <Label for="gameTypeSelect">Status</Label>
-                                    <Input type="select" id="gameTypeSelect" disabled>
-                                        <option selected>Test</option>
-                                        <option>Active</option>
-                                        <option>Finished</option>
-                                        <option>Cancelled</option>
+                                    <Label for="statusType">Status</Label>
+                                    <Input type="select" id="statusType" disabled defaultValue={1}>
+                                        <option value={1}>Test</option>
+                                        <option value={2}>Active</option>
+                                        <option value={3}>Finished</option>
+                                        <option value={4}>Cancelled</option>
                                     </Input>
                                 </Col>
                             </Row>
@@ -66,7 +74,8 @@ class CampaignCreationStep2 extends Component {
                         <Col xs={12} sm={6}>
                             <FormGroup>
                                 <Label for="contactEmail" style={{display: 'flex'}}>Your contact email </Label>
-                                <Input type="email" id="contactEmail" placeholder="email@example.com"/>
+                                <Input onChange={this.updatePrefill} type="email" id="contactEmail"
+                                       placeholder="email@example.com" value={this.state.prefill.contactEmail}/>
                                 <FormText><i><b>No spam</b>, you will receive in real time the winners of the
                                     lottery and information on your bot.</i></FormText>
                             </FormGroup>
@@ -74,12 +83,14 @@ class CampaignCreationStep2 extends Component {
                         <Col xs={12} xl={6}>
                             <Row>
                                 <Col xs={12} sm={6}>
-                                    <Label for="startDateField">Start date</Label>
-                                    <Input type="date" id="startDateField"/>
+                                    <Label for="startDate">Start date</Label>
+                                    <Input onChange={this.updatePrefill} type="date" id="startDate"
+                                           value={this.state.prefill.startDate}/>
                                 </Col>
                                 <Col xs={12} sm={6}>
-                                    <Label for="endDateField">End date</Label>
-                                    <Input type="date" id="endDateField"/>
+                                    <Label for="endDate">End date</Label>
+                                    <Input onChange={this.updatePrefill} type="date" id="endDate"
+                                           value={this.state.prefill.endDate}/>
                                 </Col>
                             </Row>
                         </Col>
@@ -97,16 +108,13 @@ class CampaignCreationStep2 extends Component {
                     </Row>
                 </Form>
                 <div>
-                    <Link to={{
-                        pathname: `step1`,
-                        state: {prefill: this.state.prefill}
-                    }}>
+                    <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
                         <Button className={"NavigationButton BackButton"}>
                             Back
                             <Icon path={mdiSkipPrevious} size={1}/>
                         </Button>
                     </Link>
-                    <Link to={"step3"}>
+                    <Link to={{pathname: `step3`, state: {prefill: this.state.prefill}}}>
                         <Button className={"NavigationButton NextButton"}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>
