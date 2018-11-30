@@ -15,8 +15,11 @@ class CampaignCreationStep2 extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            botNameHelpText: `0/${botNameMaxLength}`
+        if (props.location.state && props.location.state.prefill) {
+            this.state = {
+                prefill: props.location.state.prefill,
+                botNameHelpText: `0/${botNameMaxLength}`
+            }
         }
     }
 
@@ -84,7 +87,8 @@ class CampaignCreationStep2 extends Component {
                     <Row>
                         <Col xs={12}>
                             <h5>Upload your images</h5>
-                            <input id={"imageInput"} type="file" style={{display: "none"}} onChange={(e) => console.log(e.target)}/>
+                            <input id={"imageInput"} type="file" style={{display: "none"}}
+                                   onChange={(e) => console.log(e.target)}/>
                             <Button style={{display: 'flex', justifyContent: 'space-around'}} className={'greenBtn'}
                                     onClick={() => document.getElementById('imageInput').click()}>
                                 <Icon path={mdiImagePlus} size={1} style={{marginRight: '1em'}}/>Add an image
@@ -93,7 +97,10 @@ class CampaignCreationStep2 extends Component {
                     </Row>
                 </Form>
                 <div>
-                    <Link to={"step1"}>
+                    <Link to={{
+                        pathname: `step1`,
+                        state: {prefill: this.state.prefill}
+                    }}>
                         <Button className={"NavigationButton BackButton"}>
                             Back
                             <Icon path={mdiSkipPrevious} size={1}/>
