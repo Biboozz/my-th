@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Icon} from '@mdi/react'
 import {mdiSkipNext, mdiSkipPrevious} from '@mdi/js'
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Button, Col, Form, FormGroup, FormText, Input, Label, Row} from "reactstrap";
 import {botNameMaxLength} from "../../../config";
 
@@ -18,10 +18,16 @@ class CampaignCreationStep2 extends Component {
         if (props.location.state && props.location.state.prefill) {
             this.state = {
                 prefill: props.location.state.prefill,
-                botNameHelpText: `0/${botNameMaxLength}`
+                botNameHelpText: `0/${botNameMaxLength}`,
+                redirectNext: false
             }
         }
     }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState({redirectNext: true})
+    };
 
     updatePrefill = (event) => {
         let newPrefill = Object.assign({}, this.state.prefill);
@@ -35,15 +41,19 @@ class CampaignCreationStep2 extends Component {
     };
 
     render() {
+        if (this.state.redirectNext === true) {
+            return <Redirect to={{pathname: `step3`, state: {prefill: this.state.prefill}}} push />
+        }
+
         return (
             <div>
-                <Form>
+                <Form onSubmit={this.handleSubmit}>
                     <Row>
                         <Col xs={12} sm={6}>
                             <FormGroup>
-                                <Label for="botName">Your fun bot name</Label>
-                                <Input id="botName" placeholder="Name" maxLength={50}
-                                       onChange={this.handleBotNameChange} value={this.state.prefill.botName}/>
+                                <Label for="botName">Your fun bot name *</Label>
+                                <Input id="botName" name="botName" placeholder="Name" maxLength={50}
+                                       onChange={this.handleBotNameChange} value={this.state.prefill.botName} required/>
                                 <FormText>{this.state.botNameHelpText}</FormText>
                             </FormGroup>
                         </Col>
@@ -51,7 +61,7 @@ class CampaignCreationStep2 extends Component {
                             <Row>
                                 <Col xs={6}>
                                     <Label for="gameType">Experience</Label>
-                                    <Input type="select" id="gameType" disabled
+                                    <Input type="select" id="gameType" name="gameType" disabled
                                            defaultValue={this.state.prefill.experience}>
                                         <option value={"sweepstake"}>Sweepstake</option>
                                         <option value={"instantwin"}>Instant win</option>
@@ -60,7 +70,7 @@ class CampaignCreationStep2 extends Component {
                                 </Col>
                                 <Col xs={6}>
                                     <Label for="statusType">Status</Label>
-                                    <Input type="select" id="statusType" disabled defaultValue={1}>
+                                    <Input type="select" id="statusType" name="statusType" disabled defaultValue={1}>
                                         <option value={1}>Test</option>
                                         <option value={2}>Active</option>
                                         <option value={3}>Finished</option>
@@ -73,9 +83,9 @@ class CampaignCreationStep2 extends Component {
                     <Row>
                         <Col xs={12} sm={6}>
                             <FormGroup>
-                                <Label for="contactEmail" style={{display: 'flex'}}>Your contact email </Label>
-                                <Input onChange={this.updatePrefill} type="email" id="contactEmail"
-                                       placeholder="email@example.com" value={this.state.prefill.contactEmail}/>
+                                <Label for="contactEmail" style={{display: 'flex'}}>Your contact email *</Label>
+                                <Input onChange={this.updatePrefill} type="email" id="contactEmail" name="contactEmail"
+                                       placeholder="email@example.com" value={this.state.prefill.contactEmail} required/>
                                 <FormText><i><b>No spam</b>, you will receive in real time the winners of the
                                     lottery and information on your bot.</i></FormText>
                             </FormGroup>
@@ -83,14 +93,14 @@ class CampaignCreationStep2 extends Component {
                         <Col xs={12} xl={6}>
                             <Row>
                                 <Col xs={12} sm={6}>
-                                    <Label for="startDate">Start date</Label>
-                                    <Input onChange={this.updatePrefill} type="date" id="startDate"
-                                           value={this.state.prefill.startDate}/>
+                                    <Label for="startDate">Start date *</Label>
+                                    <Input onChange={this.updatePrefill} type="date" id="startDate" name="startDate"
+                                           value={this.state.prefill.startDate} required/>
                                 </Col>
                                 <Col xs={12} sm={6}>
-                                    <Label for="endDate">End date</Label>
-                                    <Input onChange={this.updatePrefill} type="date" id="endDate"
-                                           value={this.state.prefill.endDate}/>
+                                    <Label for="endDate">End date *</Label>
+                                    <Input onChange={this.updatePrefill} type="date" id="endDate" name="endDate"
+                                           value={this.state.prefill.endDate} required/>
                                 </Col>
                             </Row>
                         </Col>
@@ -98,7 +108,7 @@ class CampaignCreationStep2 extends Component {
                     <Row>
                         <Col xs={12}>
                             <h5>Upload your images</h5>
-                            <input id={"imageInput"} type="file" style={{display: "none"}}
+                            <input id="imageInput" name="imageInput" type="file" style={{display: "none"}}
                                    onChange={(e) => console.log(e.target)}/>
                             <Button style={{display: 'flex', justifyContent: 'space-around'}} className={'greenBtn'}
                                     onClick={() => document.getElementById('imageInput').click()}>
@@ -106,21 +116,20 @@ class CampaignCreationStep2 extends Component {
                             </Button>
                         </Col>
                     </Row>
-                </Form>
-                <div>
-                    <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
-                        <Button className={"NavigationButton BackButton"}>
-                            Back
-                            <Icon path={mdiSkipPrevious} size={1}/>
-                        </Button>
-                    </Link>
-                    <Link to={{pathname: `step3`, state: {prefill: this.state.prefill}}}>
+                    <div>
+                        <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
+                            <Button className={"NavigationButton BackButton"}>
+                                Back
+                                <Icon path={mdiSkipPrevious} size={1}/>
+                            </Button>
+                        </Link>
                         <Button className={"NavigationButton NextButton"}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>
                         </Button>
-                    </Link>
-                </div>
+                    </div>
+                </Form>
+
             </div>
         );
     }
