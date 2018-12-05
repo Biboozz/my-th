@@ -133,7 +133,6 @@ class CampaignCreationStep2 extends Component {
                         </Button>
                     </div>
                 </Form>
-
             </div>
         );
     }
