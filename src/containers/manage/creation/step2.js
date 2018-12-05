@@ -9,6 +9,7 @@ import '../../../styles/campaignCreation/global.css'
 import '../../../styles/campaignCreation/step2.css'
 import '../../../styles/utils.css'
 import {mdiImagePlus} from "@mdi/js/commonjs/mdi";
+import produce from "immer";
 
 class CampaignCreationStep2 extends Component {
 
@@ -30,9 +31,11 @@ class CampaignCreationStep2 extends Component {
     };
 
     updatePrefill = (event) => {
-        let newPrefill = Object.assign({}, this.state.prefill);
-        newPrefill[event.target.id] = event.target.value;
-        this.setState({prefill: newPrefill});
+        this.setState({
+            prefill: produce(this.state.prefill, draftPrefill => {
+                draftPrefill[event.target.id] = event.target.value
+            })
+        });
     };
 
     handleBotNameChange = (event) => {
@@ -42,14 +45,14 @@ class CampaignCreationStep2 extends Component {
 
     render() {
         if (this.state.redirectNext === true) {
-            return <Redirect to={{pathname: `step3`, state: {prefill: this.state.prefill}}} push />
+            return <Redirect to={{pathname: `step3`, state: {prefill: this.state.prefill}}} push/>
         }
 
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
                     <Row>
-                        <Col xs={12} sm={6}>
+                        <Col sm={12} lg={6}>
                             <FormGroup>
                                 <Label for="botName">Your fun bot name *</Label>
                                 <Input id="botName" name="botName" placeholder="Name" maxLength={50}
@@ -57,9 +60,9 @@ class CampaignCreationStep2 extends Component {
                                 <FormText>{this.state.botNameHelpText}</FormText>
                             </FormGroup>
                         </Col>
-                        <Col xs={12} sm={6}>
+                        <Col sm={12} lg={6}>
                             <Row>
-                                <Col xs={6}>
+                                <Col sm={6}>
                                     <Label for="gameType">Experience</Label>
                                     <Input type="select" id="gameType" name="gameType" disabled
                                            defaultValue={this.state.prefill.experience}>
@@ -68,7 +71,7 @@ class CampaignCreationStep2 extends Component {
                                         <option value={"race"}>Race</option>
                                     </Input>
                                 </Col>
-                                <Col xs={6}>
+                                <Col sm={6}>
                                     <Label for="statusType">Status</Label>
                                     <Input type="select" id="statusType" name="statusType" disabled defaultValue={1}>
                                         <option value={1}>Test</option>
@@ -81,23 +84,24 @@ class CampaignCreationStep2 extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={12} sm={6}>
+                        <Col sm={12} lg={6}>
                             <FormGroup>
                                 <Label for="contactEmail" style={{display: 'flex'}}>Your contact email *</Label>
                                 <Input onChange={this.updatePrefill} type="email" id="contactEmail" name="contactEmail"
-                                       placeholder="email@example.com" value={this.state.prefill.contactEmail} required/>
+                                       placeholder="email@example.com" value={this.state.prefill.contactEmail}
+                                       required/>
                                 <FormText><i><b>No spam</b>, you will receive in real time the winners of the
                                     lottery and information on your bot.</i></FormText>
                             </FormGroup>
                         </Col>
-                        <Col xs={12} xl={6}>
+                        <Col sm={12} lg={6}>
                             <Row>
-                                <Col xs={12} sm={6}>
+                                <Col xs={12}  sm={6} lg={6}>
                                     <Label for="startDate">Start date *</Label>
                                     <Input onChange={this.updatePrefill} type="date" id="startDate" name="startDate"
                                            value={this.state.prefill.startDate} required/>
                                 </Col>
-                                <Col xs={12} sm={6}>
+                                <Col xs={12}  sm={6} lg={6}>
                                     <Label for="endDate">End date *</Label>
                                     <Input onChange={this.updatePrefill} type="date" id="endDate" name="endDate"
                                            value={this.state.prefill.endDate} required/>
@@ -106,7 +110,7 @@ class CampaignCreationStep2 extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs={12}>
+                        <Col sm={12}>
                             <h5>Upload your images</h5>
                             <input id="imageInput" name="imageInput" type="file" style={{display: "none"}}
                                    onChange={(e) => console.log(e.target)}/>
