@@ -43,7 +43,7 @@ class CampaignCreationStep1 extends Component {
                 </div>
                 <div>
                     <Row>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"}
                                     disabled={this.state.prefill.game === "simpleimage"}
                                     onClick={() => this.gameSelect("simpleimage")}>
@@ -51,14 +51,14 @@ class CampaignCreationStep1 extends Component {
                                 <span>Lorem Ipsum</span>
                             </Button>
                         </Col>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"} disabled={this.state.prefill.game === "vote"}
                                     onClick={() => this.gameSelect("vote")}>
                                 <h3>Vote</h3>
                                 <span>Lorem Ipsum</span>
                             </Button>
                         </Col>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"}
                                     disabled={this.state.prefill.game === "treasurehunt"}
                                     onClick={() => this.gameSelect("treasurehunt")}>
@@ -70,7 +70,7 @@ class CampaignCreationStep1 extends Component {
                 </div>
                 <div style={{marginTop: '2em'}}>
                     <Row>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"}
                                     disabled={this.state.prefill.experience === "sweepstake"}
                                     onClick={() => this.experienceSelect("sweepstake")}>
@@ -78,7 +78,7 @@ class CampaignCreationStep1 extends Component {
                                 <span>Lorem Ipsum</span>
                             </Button>
                         </Col>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"}
                                     disabled={this.state.prefill.experience === "instantwin"}
                                     onClick={() => this.experienceSelect("instantwin")}>
@@ -86,7 +86,7 @@ class CampaignCreationStep1 extends Component {
                                 <span>Lorem Ipsum</span>
                             </Button>
                         </Col>
-                        <Col xs={12} xl={4}>
+                        <Col sm={12} lg={4}>
                             <Button className={"greenBtn BigChoiceButton"}
                                     disabled={this.state.prefill.experience === "race"}
                                     onClick={() => this.experienceSelect("race")}>
