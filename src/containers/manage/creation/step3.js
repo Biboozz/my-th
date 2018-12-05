@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import connect from "react-redux/es/connect/connect";
 import {stateToUserProps} from "../../../reducers/user";
 import {getAuthResponse, getPagePicture, getPermissions, getUserPages} from "../../../facebookUtilities";
-import {Col, Input, FormGroup, Label, Row, Form, Button} from "reactstrap";
+import {Button, Form, FormGroup, Input, Label, Progress} from "reactstrap";
 import ImageLoader from "react-load-image";
 import Spinner from 'react-spinner-material';
 import {Icon} from '@mdi/react'
-import {mdiRobot, mdiPlusCircle, mdiImage, mdiSkipPrevious, mdiSkipNext} from '@mdi/js'
+import {mdiImage, mdiPlusCircle, mdiRobot, mdiSkipNext, mdiSkipPrevious} from '@mdi/js'
 
 import '../../../styles/campaignCreation/step3.css'
 import '../../../styles/separator.css'
@@ -30,14 +30,15 @@ class CampaignCreationStep3 extends Component {
             readyToRender: false,
             fetchedPages: 0,
             prefill: props.location.state.prefill,
-            loadingMessage: "Init",
+            loadingBarStatus: {value: 0, message: "Waiting for facebook SDK", color: 'default'},
             associationList: null
         }
     }
 
 
-    updateMessage(message) {
-        this.setState({loadingMessage: message});
+    updateBar(valueadd, message = this.state.loadingBarStatus.message, color = this.state.loadingBarStatus.color) {
+        console.log('bar length: ', this.state.loadingBarStatus.value + valueadd);
+        this.setState({loadingBarStatus: {value: this.state.loadingBarStatus.value + valueadd, message: message, color: color}});
     }
 
     toggleRender(bool = !this.state.readyToRender) {
@@ -46,25 +47,29 @@ class CampaignCreationStep3 extends Component {
 
     loadingPages = async () => {
         this.setState({startedLoading: true});
-        this.updateMessage("Getting authResponse");
+        this.updateBar(20, "Getting login status (this step can be long)");
         getAuthResponse().then(authResponse => {
-            this.updateMessage("Getting permissions");
+            this.updateBar(20, "Getting permissions");
             getPermissions(this.props.user.fbId, authResponse.accessToken).then(permissionResponse => {
                 //If we already have the permission to see pages
-                if (permissionResponse.data.some((e1) => {
+                if (permissionResponse.error) {
+                    this.updateBar(0, permissionResponse.error.message, 'danger')
+                }
+                else if (permissionResponse.data.some((e1) => {
                     return e1.permission === "manage_pages" && e1.status === "granted"
                 })) {
-                    this.updateMessage("Getting authResponse");
+                    this.updateBar(20, "Getting pages");
                     //Getting page informations
                     getUserPages(this.props.user.fbId, authResponse.accessToken).then(r => {
-                            this.updateMessage("Getting page details...");
+                            this.updateBar(20, "Getting pages details");
                             this.setState({associationList: r.data});
-
+                            const barlength = this.state.loadingBarStatus.value;
                             for (let i in this.state.associationList) {
                                 let assocList = this.state.associationList;
                                 getPagePicture(assocList[i].id).then((r) => {
                                     assocList[i].picture = r.data.url;
                                     console.log(r.data.url);
+                                    this.updateBar((100 - barlength) / assocList.length);
                                     this.setState({fetchedPages: this.state.fetchedPages + 1, associationList: assocList});
                                 })
                             }
@@ -87,16 +92,6 @@ class CampaignCreationStep3 extends Component {
                 this.loadingPages();
     }
 
-    updateImageMatchPrefill = (id, event) => {
-        this.setState({
-            prefill: produce(this.state, (draftPrefill) => {
-                if (!draftPrefill.imageMatches[id])
-                    draftPrefill.imageMatches = {};
-                draftPrefill.imageMatches[id] = event.target.value
-            })
-        })
-    }
-
     updatePrefill = (event) => {
         this.setState({
             prefill: produce(this.state.prefill, draftPrefill => {
@@ -107,19 +102,23 @@ class CampaignCreationStep3 extends Component {
         });
     };
 
+    connectBot = (page) => {
+        console.log(`Connect bot to page: ${page.id}`)
+    }
+
     render() {
         let associaitonRender = [];
         if (this.state.associationList && this.state.fetchedPages === this.state.associationList.length) {
             for (let i in this.state.associationList) {
                 // noinspection JSUnfilteredForInLoop
-                const assoc = this.state.associationList[i];
+                const page = this.state.associationList[i];
                 associaitonRender.push(
-                    <div className={"Association"} key={assoc.id}>
+                    <div className={"Association"} key={page.id}>
                         <div className={"flexbox hcenter"} style={{width: '100%'}}>
                             <div className={"flexbox vcenter hcenter"}>
                                 {/*TODO: prevent XSS throught img -> src*/}
-                                <ImageLoader src={`${assoc.picture}`}>
-                                    <img alt={`${assoc.name} Cover`} className={"roundImage"}/>
+                                <ImageLoader src={`${page.picture}`}>
+                                    <img alt={`${page.name} Cover`} className={"roundImage"}/>
                                     <span>Error loading image</span>
                                     <div className={"flexbox vcenter hcenter"}>
                                         <Spinner
@@ -131,11 +130,12 @@ class CampaignCreationStep3 extends Component {
                                 </ImageLoader>
                             </div>
                             <div className={"flexbox vcenter"} style={{flexGrow: 1}}>
-                                <span className={"associationName"}> {assoc.name} </span>
+                                <span className={"associationName"}> {page.name} </span>
                             </div>
                             <div className={"flexbox vcenter hcenter"}>
-                                <BigButton className={"greenBtn removeTextOnSmall"}><Icon path={mdiRobot} size={1}
-                                                                                          color={"#ffffff"}/><span>Connect bot to page</span></BigButton>
+                                <BigButton className={"greenBtn removeTextOnSmall"}
+                                           onClick={() => this.connectBot(page)}><Icon path={mdiRobot} size={1}
+                                                                                       color={"#ffffff"}/><span>Connect bot to page</span></BigButton>
                             </div>
                         </div>
                         <hr className={"hSeparator"}/>
@@ -144,25 +144,15 @@ class CampaignCreationStep3 extends Component {
         }
         return (
             <div style={{marginTop: '2rem'}}>
+                <h2 style={{color: "#686868"}}>Your facebook pages</h2>
                 {!(this.state.associationList && this.state.fetchedPages === this.state.associationList.length) ?
-                    <div style={{
-                        display: "flex",
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        <Spinner
-                            size={60}
-                            spinnerColor={"#ddd"}
-                            spinnerWidth={5}
-                            visible={true}/>
-                        <br/>
-                        <span>{this.state.loadingMessage}</span>
-                        {/*<button onClick={this.loadingPages}>TestFB</button>*/}
+                    <div style={{alignItems: 'center', textAlign: "center"}}>
+                        <span style={{margin : 'auto'}}>{this.state.loadingBarStatus.message}</span>
+                        <Progress animated={this.state.loadingBarStatus.color != 'danger'} value={this.state.loadingBarStatus.value} color={this.state.loadingBarStatus.color}
+                                  style={{margin: "2em auto", width: "50%"}}/>
                     </div>
                     :
                     <div style={{marginBottom: "3em"}}>
-                        <h2 style={{color: "#686868"}}>Your facebook pages</h2>
                         {associaitonRender}
                     </div>
                 }
@@ -172,7 +162,8 @@ class CampaignCreationStep3 extends Component {
                         <div style={{marginBottom: '1em'}}>
                             <FormGroup>
                                 <Label for={"firstMessage"}>First Message *</Label>
-                                <Input type={"textarea"} id={"firstMessage"} name={"firstMessage"} required value={this.state.prefill.firstMessage}
+                                <Input type={"textarea"} id={"firstMessage"} name={"firstMessage"} required
+                                       value={this.state.prefill.firstMessage}
                                        onChange={this.updatePrefill}
                                        placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
                             </FormGroup>
@@ -182,7 +173,8 @@ class CampaignCreationStep3 extends Component {
                         </div>
                         <FormGroup>
                             <Label for={"analysisMessage"}>Analysis message *</Label>
-                            <Input type={"textarea"} id={"analysisMessage"} name={"analysisMessage"} required value={this.state.prefill.analysisMessage}
+                            <Input type={"textarea"} id={"analysisMessage"} name={"analysisMessage"} required
+                                   value={this.state.prefill.analysisMessage}
                                    onChange={this.updatePrefill}
                                    placeholder={"It appears every time when a user sent a message."}/>
                         </FormGroup>
@@ -202,13 +194,15 @@ class CampaignCreationStep3 extends Component {
                         </FormGroup>
                         <FormGroup>
                             <Label for={"defaultMessage"}>Default Message</Label>
-                            <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"} value={this.state.prefill.defaultMessage}
+                            <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"}
+                                   value={this.state.prefill.defaultMessage}
                                    onChange={this.updatePrefill}
                                    placeholder={"It appears every time when the bot doesn't understand the user message. For example, if a user sends some text, the bot will use this default message to answer."}/>
                         </FormGroup>
                         <FormGroup>
                             <Label for={"finalMessage"}>Final Message</Label>
-                            <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"} value={this.state.prefill.finalMessage}
+                            <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"}
+                                   value={this.state.prefill.finalMessage}
                                    onChange={this.updatePrefill}
                                    placeholder={"This message will come just after the Match message. It's dedicated for sharing the experience, a share button will be displayed."}/>
                         </FormGroup>
@@ -225,14 +219,11 @@ class CampaignCreationStep3 extends Component {
                             </Button>
                         </div>
                     </Form>
-
                 </div>
             </div>
 
         );
     }
 }
-
-CampaignCreationStep3.propTypes = {};
 
 export default connect(stateToUserProps)(CampaignCreationStep3);

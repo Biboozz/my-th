@@ -21,8 +21,8 @@ export class AccountNavbarEntry extends React.Component {
     }
 
     logoutHandler = async () => {
-        console.debug("[DEBUG] MTH - AWS Cognito: User logout.");
-        await Auth.signOut()
+        console.qdebug("[DEBUG] MTH - AWS Cognito: User logout.");
+        Auth.signOut()
             .then(() => {
                 this.props.dispatch({type: "LOGOUT"});
             })
