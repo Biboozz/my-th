@@ -10,10 +10,6 @@
     box-shadow: none !important;
 }
 
-.bigRoundBtn svg {
-    margin-right: 1em;
-}
-
 .bigRoundBtn span {
     margin: auto 2em auto 2em;
 }

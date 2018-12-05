@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {stateToUserProps} from "../reducers/user";
 import {withRouter} from "react-router-dom";
-import {urls} from "../config";
 
 export default function (key, redirectionUrl, ComposedComponent) {
     class withStateKey extends Component {

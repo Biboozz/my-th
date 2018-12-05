@@ -56,3 +56,16 @@ div.vr {
     background: #60783b;
     border-color: transparent !important;
 }
+
+.roundBtn {
+    border-radius: 50%;
+    height: 4rem;
+    min-width: 4rem;
+    line-height: 1em;
+    margin: auto;
+
+    display: inline-block;
+    justify-content: center;
+    transition: font-weight .5s, background-color .5s;
+    box-shadow: none !important;
+}

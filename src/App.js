@@ -28,6 +28,8 @@ class App extends Component {
     }
 
     async componentDidMount() {
+        window.fbLoaded = [];
+
         window.fbAsyncInit = function () {
             window.FB.init({
                 appId: facebookAppID,
@@ -35,6 +37,11 @@ class App extends Component {
                 xfbml: true,
                 version: 'v3.1'
             });
+
+            for (let i in window.fbLoaded) {
+                console.log(typeof window.fbLoaded[i]);
+                window.fbLoaded[i]()
+            }
         };
 
         (function (d, s, id) {
@@ -53,8 +60,7 @@ class App extends Component {
                 await Auth.currentAuthenticatedUser().then(user => {
                     store.dispatch({type: "LOGIN", userData: user})
                 });
-        }
-        catch (e) {
+        } catch (e) {
             if (e) {
                 console.error("[AWS_Cogn] " + e);
             }

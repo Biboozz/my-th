@@ -1,0 +1,35 @@
+.roundImage {
+    position: relative;
+    overflow: hidden;
+    width: 4.5em;
+    height: 4.5em;
+    margin: .5em;
+    border-radius: 50%;
+}
+
+span.associationName {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.flexbox {
+    display: flex;
+}
+
+.flexbox.vcenter {
+    align-items: center;
+}
+
+.flexbox.hcenter {
+    justify-content: center;
+}
+
+@media (max-width: 766px) {
+    .removeTextOnSmall > span {
+        display: none;
+    }
+
+    span.associationName {
+        font-size: medium;
+    }
+}
