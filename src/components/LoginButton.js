@@ -16,13 +16,14 @@ class LoginButton extends Component {
     }
 
     callErrorHandler = (e) => {
+        this.setConnecting();
         if (this.props.error) {
             this.props.error(e)
         }
     };
 
     FacebookToAWS(tokenData, userData) {
-        console.debug("[DEBUG] MTH - AWS Log in : ", tokenData, userData);
+        console.debug("[DEBUG] MTH - AWS Log i;n : ", tokenData, userData);
         Auth.federatedSignIn("facebook", {...tokenData}, {
             email: userData.email,
             username: userData.name,
@@ -32,15 +33,13 @@ class LoginButton extends Component {
             avatar: urls.getFbAvatar(userData.id)
         }).then(credentials => {
             console.debug("[AWS_Cogn] Connection success.", credentials);
-            this.setConnecting();
             Auth.currentAuthenticatedUser().then(user => {
                 this.props.dispatch({type: "LOGIN", userData: user});
                 if (this.props.success)
                     this.props.success(user);
             }).catch(e => this.callErrorHandler(e));
         }).catch(e => {
-            console.error("[AWS_Cogn] " + e);
-            this.setConnecting();
+            console.error("[AWS_Cogn] ", e);
             this.callErrorHandler(e);
         });
     };
@@ -49,15 +48,16 @@ class LoginButton extends Component {
         this.setConnecting(true);
         window.FB.login(r => {
             if (r.status === "connected") {
-                let tokenData = {token: r.authResponse.accessToken, expires_at: r.authResponse.expiresIn};
+                let tokenData = {token: r.authResponse.accessToken, expires_at: r.authResponse.expiresIn * 1000 + new Date().getTime()};
                 console.debug("[DEBUG] MTH - Facebook recieved connection", r);
                 window.FB.api('/me', {fields: "email,name,last_name,first_name,id"}, userData => {
                     this.FacebookToAWS(tokenData, userData);
                 });
             }
-            else
+            else {
                 console.debug("MTH - Facebook recieved response", r);
-            this.callErrorHandler(r);
+                this.callErrorHandler(r);
+            }
         }, {fields: facebookFields});
     };
 

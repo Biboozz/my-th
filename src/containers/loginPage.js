@@ -39,8 +39,7 @@ class LoginPage extends Component {
                             race, instant win or sweepstake. Enrich your visuals now ! </p>
                         <Row>
                             {!this.props.user.isAuthenticated
-                                ? <LoginButton className={"bigRoundBtn facebook"} success={this.redirect_to_next}
-                                               error={this.connectionError}>
+                                ? <LoginButton className={"bigRoundBtn facebook"} success={this.redirect_to_next}>
                                         <span><Icon path={mdiFacebook}
                                                     size={1}/> Login using your facebook account</span>
                                 </LoginButton>
