@@ -120,17 +120,18 @@ class CampaignCreationStep2 extends Component {
                             </Button>
                         </Col>
                     </Row>
-                    <div>
+                    <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
+                        <Button className={"NavigationButton NextButton"}>
+                            Next
+                            <Icon path={mdiSkipNext} size={1}/>
+                        </Button>
+                        <div style={{flexGrow: 1}}/>
                         <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
                             <Button className={"NavigationButton BackButton"}>
                                 Back
                                 <Icon path={mdiSkipPrevious} size={1}/>
                             </Button>
                         </Link>
-                        <Button className={"NavigationButton NextButton"}>
-                            Next
-                            <Icon path={mdiSkipNext} size={1}/>
-                        </Button>
                     </div>
                 </Form>
             </div>

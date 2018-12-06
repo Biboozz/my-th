@@ -33,3 +33,33 @@ span.associationName {
         font-size: medium;
     }
 }
+
+.channelButton {
+    background: transparent !important;
+    border: transparent !important;
+    transition: background .5s ease-in-out;
+    box-shadow: none !important;
+}
+
+
+.channelButton:disabled {
+    background: transparent !important;
+}
+
+
+.channelButton > svg {
+    transition: color .3s ease-in-out;
+    color: #999999;
+}
+
+.channelButton.messenger:hover > svg {
+    color: #0084FF !important;
+}
+
+.channelButton.twitter:hover > svg {
+    color: #38A1F3 !important;
+}
+
+.channelButton.email:hover > svg {
+    color: #000000 !important;
+}
