@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import {Icon} from '@mdi/react'
 import {mdiSkipNext, mdiSkipPrevious} from '@mdi/js'
 import {Link, Redirect} from "react-router-dom";
@@ -10,6 +11,8 @@ import '../../../styles/campaignCreation/step2.css'
 import '../../../styles/utils.css'
 import {mdiImagePlus} from "@mdi/js/commonjs/mdi";
 import produce from "immer";
+import {SummaryGame, SummaryStatus} from "./components/summary";
+import Field from "./components/FieldGenericClass";
 
 class CampaignCreationStep2 extends Component {
 
@@ -19,7 +22,6 @@ class CampaignCreationStep2 extends Component {
         if (props.location.state && props.location.state.prefill) {
             this.state = {
                 prefill: props.location.state.prefill,
-                botNameHelpText: `0/${botNameMaxLength}`,
                 redirectNext: false
             }
         }
@@ -53,58 +55,31 @@ class CampaignCreationStep2 extends Component {
                 <Form onSubmit={this.handleSubmit}>
                     <Row>
                         <Col sm={12} lg={6}>
-                            <FormGroup>
-                                <Label for="botName">Your fun bot name *</Label>
-                                <Input id="botName" name="botName" placeholder="Name" maxLength={50}
-                                       onChange={this.handleBotNameChange} value={this.state.prefill.botName} required/>
-                                <FormText>{this.state.botNameHelpText}</FormText>
-                            </FormGroup>
+                            <BotName onChange={this.updatePrefill} value={this.state.prefill.botName}/>
                         </Col>
                         <Col sm={12} lg={6}>
                             <Row>
                                 <Col sm={6}>
-                                    <Label for="gameType">Experience</Label>
-                                    <Input type="select" id="gameType" name="gameType" disabled
-                                           defaultValue={this.state.prefill.experience}>
-                                        <option value={"sweepstake"}>Sweepstake</option>
-                                        <option value={"instantwin"}>Instant win</option>
-                                        <option value={"race"}>Race</option>
-                                    </Input>
+                                    <SummaryGame value={this.state.prefill.game}/>
                                 </Col>
                                 <Col sm={6}>
-                                    <Label for="statusType">Status</Label>
-                                    <Input type="select" id="statusType" name="statusType" disabled defaultValue={1}>
-                                        <option value={1}>Test</option>
-                                        <option value={2}>Active</option>
-                                        <option value={3}>Finished</option>
-                                        <option value={4}>Cancelled</option>
-                                    </Input>
+                                    <SummaryStatus/>
                                 </Col>
                             </Row>
                         </Col>
                     </Row>
                     <Row>
                         <Col sm={12} lg={6}>
-                            <FormGroup>
-                                <Label for="contactEmail" style={{display: 'flex'}}>Your contact email *</Label>
-                                <Input onChange={this.updatePrefill} type="email" id="contactEmail" name="contactEmail"
-                                       placeholder="email@example.com" value={this.state.prefill.contactEmail}
-                                       required/>
-                                <FormText><i><b>No spam</b>, you will receive in real time the winners of the
-                                    lottery and information on your bot.</i></FormText>
-                            </FormGroup>
+                            <Email onChange={this.updatePrefill} value={this.state.prefill.contactEmail}/>
                         </Col>
                         <Col sm={12} lg={6}>
                             <Row>
-                                <Col xs={12}  sm={6} lg={6}>
-                                    <Label for="startDate">Start date *</Label>
-                                    <Input onChange={this.updatePrefill} type="date" id="startDate" name="startDate"
-                                           value={this.state.prefill.startDate} required/>
+                                <Col xs={12} sm={6} lg={6}>
+                                    <StartDate onChange={this.updatePrefill} value={this.state.prefill.startDate}/>
+
                                 </Col>
-                                <Col xs={12}  sm={6} lg={6}>
-                                    <Label for="endDate">End date *</Label>
-                                    <Input onChange={this.updatePrefill} type="date" id="endDate" name="endDate"
-                                           value={this.state.prefill.endDate} required/>
+                                <Col xs={12} sm={6} lg={6}>
+                                    <EndDate onChange={this.updatePrefill} value={this.state.prefill.endDate}/>
                                 </Col>
                             </Row>
                         </Col>
@@ -139,6 +114,62 @@ class CampaignCreationStep2 extends Component {
     }
 }
 
-CampaignCreationStep2.propTypes = {};
+class BotName extends Field {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <FormGroup>
+                    <Label for="botName">Your fun bot name *</Label>
+                    <Input id="botName" name="botName" placeholder="Name" maxLength={50}
+                           onChange={this.props.onChange} value={this.props.value} required/>
+                    <FormText>{`${(typeof this.props.value === 'string') ? this.props.value.length : '0'}/${botNameMaxLength}`}</FormText>
+                </FormGroup>
+            </div>
+        );
+    }
+}
+
+class Email extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for="contactEmail" style={{display: 'flex'}}>Your contact email *</Label>
+                <Input onChange={this.props.onChange} type="email" id="contactEmail" name="contactEmail"
+                       placeholder="email@example.com" value={this.props.value}
+                       required/>
+                <FormText><i><b>No spam</b>, you will receive in real time the winners of the
+                    lottery and information on your bot.</i></FormText>
+            </FormGroup>
+        );
+    }
+}
+
+class StartDate extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for="startDate">Start date *</Label>
+                <Input onChange={this.props.onChange} type="date" id="startDate" name="startDate"
+                       value={this.props.value} required/>
+            </FormGroup>
+        );
+    }
+}
+
+class EndDate extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for="startDate">End date *</Label>
+                <Input onChange={this.props.onChange} type="date" id="endDate" name="endDate"
+                       value={this.props.value} required/>
+            </FormGroup>
+        );
+    }
+}
 
 export default CampaignCreationStep2;

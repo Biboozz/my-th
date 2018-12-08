@@ -28,6 +28,8 @@ import {Link, Redirect} from "react-router-dom";
 import produce from "immer";
 import User from "../../../classes/User";
 import CollapsibleTitle from "../../../components/CollapsibleTitle";
+import {BotNameSummary, SummaryGame, SummaryStatus} from "./components/summary";
+import Field from "./components/FieldGenericClass";
 
 const testAssociation = [
     {name: "Test1", cover: "https://picsum.photos/500/500/?image=1063", id: "idTest1"},
@@ -69,14 +71,17 @@ class CampaignCreationStep3 extends Component {
         this.setState({
             prefill: produce(this.state.prefill, draftPrefill => {
                 draftPrefill[event.target.id] = event.target.value;
-                console.log(event.target.id, event.target.value);
-                console.log(draftPrefill);
             })
         });
     };
 
     connectBot = (page) => {
-        console.log(`Connect bot to page: ${page.id}`)
+        console.log("connect: ", page);
+        this.setState({
+            prefill: produce(this.state.prefill, draftPrefill => {
+                draftPrefill.page = page.id;
+            })
+        });
     };
 
     render() {
@@ -86,39 +91,47 @@ class CampaignCreationStep3 extends Component {
 
         return (
             <div style={{marginTop: '2rem'}}>
+                <Row>
+                    <Col sm={12} lg={6}>
+                        <Row>
+                            <Col sm={6}>
+                                <BotNameSummary value={this.state.prefill.botName}/>
+                            </Col>
+                            <Col sm={6}>
+                            </Col>
+                        </Row>
+
+                    </Col>
+                    <Col sm={12} lg={6}>
+                        <Row>
+                            <Col sm={6}>
+                                <SummaryGame value={this.state.prefill.game}/>
+                            </Col>
+                            <Col sm={6}>
+                                <SummaryStatus/>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
                 <Form onSubmit={this.handleSubmit}>
 
                     <ChannelSection prefillChannels={this.state.prefill.channels} updateChannel={this.toggleChannel}/>
 
-                    {/*<PagesSection user={this.props.user} connect={this.connectBot}/>*/}
+                    <PagesSection user={this.props.user} connect={this.connectBot}
+                                  selectedPage={this.state.prefill.page}/>
 
                     <div style={{margin: '2rem auto'}}>
                         <h2 style={{color: "#686868"}}>You bot messages</h2>
                         <div style={{marginBottom: '1em'}}>
-                            <FormGroup>
-                                <Label for={"firstMessage"}>First Message *</Label>
-                                <Input type={"textarea"} id={"firstMessage"} name={"firstMessage"} required
-                                       value={this.state.prefill.firstMessage}
-                                       onChange={this.updatePrefill}
-                                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
-                            </FormGroup>
+                            <FirstMessage onChange={this.updatePrefill} value={this.state.prefill.firstMessage}/>
                             <span>Image with you first message (optional)</span><Icon path={mdiPlusCircle}
                                                                                       size={1} color={"#111111"}
                                                                                       style={{margin: ".5em"}}/>
                         </div>
-                        <FormGroup>
-                            <Label for={"analysisMessage"}>Analysis message *</Label>
-                            <Input type={"textarea"} id={"analysisMessage"} name={"analysisMessage"} required
-                                   value={this.state.prefill.analysisMessage}
-                                   onChange={this.updatePrefill}
-                                   placeholder={"It appears every time when a user sent a message."}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for={"nomatchMessage"}>No Match Message</Label>
-                            <Input type={"textarea"} id={"nomatchMessage"} name={"nomatchMessage"}
-                                   onChange={this.updatePrefill}
-                                   placeholder={"It appears every time when a user sent an unknown pic."}/>
-                        </FormGroup>
+                        <AnalysisMessage onChange={this.updatePrefill} value={this.state.prefill.analysisMessage}/>
+
+                        <NoMatchMessage onChange={this.updatePrefill} value={this.state.prefill.noMatchMessage}/>
+
                         <FormGroup>
                             {/*TODO: Recover images from step2*/}
                             <Label for={"matchMessage1"}>Match Message *</Label>
@@ -127,20 +140,11 @@ class CampaignCreationStep3 extends Component {
                             <Input type={"textarea"} id={"matchMessage1"} name={"matchMessage1"} required
                                    placeholder={"The above image is matched. Send a message relative to this image. For sweepstake experience, do not forget to inform your user that his participation is then validated."}/>
                         </FormGroup>
-                        <FormGroup>
-                            <Label for={"defaultMessage"}>Default Message</Label>
-                            <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"}
-                                   value={this.state.prefill.defaultMessage}
-                                   onChange={this.updatePrefill}
-                                   placeholder={"It appears every time when the bot doesn't understand the user message. For example, if a user sends some text, the bot will use this default message to answer."}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for={"finalMessage"}>Final Message</Label>
-                            <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"}
-                                   value={this.state.prefill.finalMessage}
-                                   onChange={this.updatePrefill}
-                                   placeholder={"This message will come just after the Match message. It's dedicated for sharing the experience, a share button will be displayed."}/>
-                        </FormGroup>
+
+                        <DefaultMessage onChange={this.updatePrefill} value={this.state.prefill.defaultMessage}/>
+
+                        <FinalMessage onChange={this.updatePrefill} value={this.state.prefill.finalMessage}/>
+
                         <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
                             <Button className={"NavigationButton NextButton"} type={"submission"}>
                                 Next
@@ -237,6 +241,11 @@ class PagesSection extends Component {
         })
     };
 
+    disabledButton = (page) => {
+        console.log(`${this.props.selectedPage} === ${page.id}: ${this.props.selectedPage === page.id}`);
+        return (this.props.selectedPage === page.id)
+    };
+
     render() {
         let associaitonRender = [];
         if (this.state.associationList && this.state.fetchedPages === this.state.associationList.length) {
@@ -265,8 +274,11 @@ class PagesSection extends Component {
                             </div>
                             <div className={"flexbox vcenter hcenter"}>
                                 <BigButton className={"greenBtn removeTextOnSmall"}
-                                           onClick={() => this.props.connect(page)}><Icon path={mdiRobot} size={1}
-                                                                                          color={"#ffffff"}/><span>Connect bot to page</span></BigButton>
+                                           onClick={() => this.props.connect(page)} disabled={this.disabledButton(page)}>
+                                    <Icon path={mdiRobot} size={1}
+                                          color={"#ffffff"}/>
+                                    <span>Connect bot to page</span>
+                                </BigButton>
                             </div>
                         </div>
                         <hr className={"hSeparator"}/>
@@ -328,19 +340,19 @@ class ChannelSection extends Component {
             <div style={{margin: '2rem auto'}}>
                 <h2 style={{color: "#686868"}}>Choose your channel</h2>
                 <Row>
-                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                    <Col style={{textAlign: "center"}}>
                         <this.ChannelButton id={"messenger"} icon={mdiFacebookMessenger} active_color={"#0084FF"}
                                             className={"messenger"}
                                             onClick={() => this.props.updateChannel('messenger')}
                                             active={this.channelEnabled("messenger")}/>
                     </Col>
-                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                    <Col style={{textAlign: "center"}}>
                         <this.ChannelButton id={"twitter"} icon={mdiTwitter} active_color={"#38A1F3"}
                                             className={"twitter"}
                                             onClick={() => this.props.updateChannel("twitter")}
                                             active={this.channelEnabled("twitter")}/>
                     </Col>
-                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                    <Col style={{textAlign: "center"}}>
                         <this.ChannelButton id={"email"} icon={mdiEmail} active_color={"#121212"} className={"email"}
                                             onClick={() => this.props.updateChannel("email")}
                                             active={this.channelEnabled("email")}/>
@@ -357,6 +369,77 @@ class ChannelSection extends Component {
         );
     }
 
+}
+
+class FirstMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={"firstMessage"}>First Message *</Label>
+                <Input type={"textarea"} id={"firstMessage"} name={"firstMessage"} required
+                       value={this.props.value}
+                       onChange={this.props.onChange}
+                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+            </FormGroup>
+        );
+    }
+}
+
+
+class AnalysisMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={"analysisMessage"}>Analysis Message *</Label>
+                <Input type={"textarea"} id={"analysisMessage"} name={"analysisMessage"} required
+                       value={this.props.value}
+                       onChange={this.props.onChange}
+                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+            </FormGroup>
+        );
+    }
+}
+
+class NoMatchMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={"noMatchMessage"}>No Match Message *</Label>
+                <Input type={"textarea"} id={"noMatchMessage"} name={"noMatchMessage"} required
+                       value={this.props.value}
+                       onChange={this.props.onChange}
+                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+            </FormGroup>
+        );
+    }
+}
+
+class DefaultMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={"defaultMessage"}>Default Message</Label>
+                <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"} required
+                       value={this.props.value}
+                       onChange={this.props.onChange}
+                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+            </FormGroup>
+        );
+    }
+}
+
+class FinalMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={"finalMessage"}>Final Message</Label>
+                <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"} required
+                       value={this.props.value}
+                       onChange={this.props.onChange}
+                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+            </FormGroup>
+        );
+    }
 }
 
 

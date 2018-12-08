@@ -17,6 +17,7 @@ import '../../../styles/campaignCreation/global.css'
 import '../../../styles/campaignCreation/step4.css'
 import produce from "immer";
 import SwitchButton from "../../../components/switch";
+import Field from "./components/FieldGenericClass";
 
 function extractValue(dict, key, elseRet = null) {
     if (dict && key in dict) {
@@ -70,17 +71,22 @@ export default class CampaignCreationStep4 extends Component {
         })
     };
 
+    updatePrefill = (event) => {
+        console.log(this.state.prefill);
+        this.setState({
+            prefill: produce(this.state.prefill, draftPrefill => {
+                draftPrefill[event.target.id] = event.target.value;
+            })
+        });
+    };
 
     render() {
         return (
             <div>
                 <PrizeSection add={this.addLot} edit={this.editLot} prizes={this.state.prefill.prizes}/>
                 <Form>
-                    <FormGroup>
-                        <Label for={'prizeWinMessage'}>Prize win message</Label>
-                        <Input type='textarea' id={'prizeWinMessage'} name={'prizeWinMessage'}
-                               placeholder={"At the end date of the sweepstake, a draw will be automatically run on our servers and winners will receive this message."}/>
-                    </FormGroup>
+
+                    <PrizeWinMessage onChange={this.updatePrefill} value={this.state.prefill.prizeWinMessage}/>
 
                     {/*TODO: Messenger form*/}
 
@@ -108,11 +114,10 @@ export default class CampaignCreationStep4 extends Component {
                                 <Icon path={mdiAlertCircle} color={"#d20000"} style={{width: '100%'}}/>
                             </Col>
                             <Col xs={9} md={10} lg={11}>
-                                <p style={{margin: 'auto'}}>When you run lotteries, you should have to respect your
-                                    country
-                                    laws. Most of the time,
-                                    you have to publish contest rules in strict conditions. Refer to your authorities.
-                                    Clic&Gain is not responsible for eventual law infrigements.</p>
+                                <p style={{margin: 'auto'}}>
+                                    When you run lotteries, you should have to respect your country laws. Most of the
+                                    time, you have to publish contest rules in strict conditions. Refer to your
+                                    authorities. Clic&Gain is not responsible for eventual law infrigements.</p>
                             </Col>
                         </Row>
                     </Alert>
@@ -141,12 +146,8 @@ export default class CampaignCreationStep4 extends Component {
                             <Col sm={{size: 7, offset: 1}}>
                                 <p>
                                     When you decide that your bot is ready to go live, click here. Once done, <b>you
-                                    will
-                                    not
-                                    able to edit your bot</b>. However, you can delete it in your dashboard home page
-                                    and
-                                    create
-                                    another one.
+                                    will not able to edit your bot</b>. However, you can delete it in your dashboard
+                                    home page and create another one.
                                 </p>
                             </Col>
                         </Row>
@@ -167,7 +168,7 @@ export default class CampaignCreationStep4 extends Component {
 }
 
 class PrizeSection extends Component {
-    propTypes = {
+    static propTypes = {
         prizes: PropTypes.arrayOf(PropTypes.object),
         edit: PropTypes.func.isRequired,
         add: PropTypes.func.isRequired
@@ -204,7 +205,6 @@ class PrizeEntry extends Component {
         if (this.props.prize) {
             prefill = Object.assign(prefill, this.props.prize);
         }
-        console.log(prefill);
         return (
             <div style={{marginBottom: '2rem'}}>
                 <Form onSubmit={this.props.handler}>
@@ -248,7 +248,7 @@ class PrizeEntry extends Component {
                                         }
                                     </Col>
                                     <Col sm={12} md={6} className={"flexbox vcenter hcenter"}>
-                                        <Button style={{margin: 'auto'}} onClick={console.log("Hey, Image upload !")}
+                                        <Button style={{margin: 'auto'}} onClick={() => console.log("Hey, Image upload !")}
                                                 className={"roundBtn small"}
                                                 type="button">
                                             <Icon path={mdiImagePlus}
@@ -261,6 +261,20 @@ class PrizeEntry extends Component {
                     </Row>
                 </Form>
             </div>
+        );
+    }
+}
+
+class PrizeWinMessage extends Field {
+    render() {
+        return (
+            <FormGroup>
+                <Label for={'prizeWinMessage'}>Prize win message</Label>
+                <Input type='textarea' id={'prizeWinMessage'} name={'prizeWinMessage'}
+                       onChange={this.props.onChange}
+                       value={this.props.value}
+                       placeholder={"At the end date of the sweepstake, a draw will be automatically run on our servers and winners will receive this message."}/>
+            </FormGroup>
         );
     }
 }
