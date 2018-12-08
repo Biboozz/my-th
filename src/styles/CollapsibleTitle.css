@@ -2,23 +2,20 @@ div.collapsible-title {
     display: flex;
     justify-content: space-between;
     align-content: baseline;
-    width: 100%;
+    width: 95%;
     cursor: pointer;
+    margin: auto;
     margin-bottom: .5em;
-}
-
-.collapsible-title h2 {
-    float: left;
-    display: inline;
-    margin: 0;
 }
 
 .collapsible-icon {
     transition: transform .2s ease-in-out;
+    transform-origin: center center;
 }
 
 .collapsible-content {
-    margin-bottom: .5rem;
+    width: 93%;
+    margin: auto auto .5rem auto;
 }
 
 .collapsible-notif {

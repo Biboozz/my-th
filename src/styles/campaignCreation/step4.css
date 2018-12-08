@@ -1,0 +1,30 @@
+button.purple {
+    background: #B88BC6;
+    color: #ffffff;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+button.purple:hover {
+    background: #916e9d !important;
+}
+
+button.purple:active {
+    background: #72567b !important;
+    border-color: transparent !important;
+}
+
+.launchButton {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.launchButton.purple {
+    font-size: x-large;
+}
+
+.separatorBtnTxt {
+    height: 1.5em;
+}

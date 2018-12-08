@@ -18,14 +18,16 @@ import {
     mdiEmail
 } from '@mdi/js'
 
+import '../../../styles/campaignCreation/global.css'
 import '../../../styles/campaignCreation/step3.css'
 import '../../../styles/separator.css'
 import '../../../styles/utils.css'
 
 import BigButton from "../../../components/bigButton";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import produce from "immer";
 import User from "../../../classes/User";
+import CollapsibleTitle from "../../../components/CollapsibleTitle";
 
 const testAssociation = [
     {name: "Test1", cover: "https://picsum.photos/500/500/?image=1063", id: "idTest1"},
@@ -37,13 +39,16 @@ class CampaignCreationStep3 extends Component {
         super(props);
 
         this.state = {
-            prefill: props.location.state.prefill
+            prefill: props.location.state.prefill,
+            redirectNext: false
         }
     }
 
-    toggleRender(bool = !this.state.readyToRender) {
-        this.setState({readyToRender: bool});
-    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState({redirectNext: true})
+    };
 
     toggleChannel = (id) => {
         this.setState({
@@ -75,15 +80,20 @@ class CampaignCreationStep3 extends Component {
     };
 
     render() {
+        if (this.state.redirectNext === true) {
+            return <Redirect to={{pathname: `step4`, state: {prefill: this.state.prefill}}} push/>
+        }
+
         return (
             <div style={{marginTop: '2rem'}}>
-                <ChannelSection prefillChannels={this.state.prefill.channels} updateChannel={this.toggleChannel}/>
+                <Form onSubmit={this.handleSubmit}>
 
-                <PagesSection user={this.props.user}/>
+                    <ChannelSection prefillChannels={this.state.prefill.channels} updateChannel={this.toggleChannel}/>
 
-                <div style={{margin: '2rem auto'}}>
-                    <h2 style={{color: "#686868"}}>You bot messages</h2>
-                    <Form>
+                    {/*<PagesSection user={this.props.user} connect={this.connectBot}/>*/}
+
+                    <div style={{margin: '2rem auto'}}>
+                        <h2 style={{color: "#686868"}}>You bot messages</h2>
                         <div style={{marginBottom: '1em'}}>
                             <FormGroup>
                                 <Label for={"firstMessage"}>First Message *</Label>
@@ -144,27 +154,26 @@ class CampaignCreationStep3 extends Component {
                                 </Button>
                             </Link>
                         </div>
-                    </Form>
-                </div>
+                    </div>
+                </Form>
             </div>
-
-        );
+        )
+            ;
     }
 }
 
 //FIXME: (#4) Application request limit reached
-class PagesSection extends Component{
+class PagesSection extends Component {
 
     static propTypes = {
         user: PropTypes.instanceOf(User).isRequired
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             startedloading: false,
-            readyToRender: false,
             fetchedPages: 0,
             loadingBarStatus: {value: 0, message: "Waiting for facebook SDK", color: 'default'},
             associationList: null
@@ -175,10 +184,10 @@ class PagesSection extends Component{
     async componentDidMount() {
         if (!this.state.startedLoading)
             console.log("Ran loading page");
-            if (window.FB === undefined)
-                window.fbLoaded.push(this.loadingPages);
-            else
-                this.loadingPages();
+        if (window.FB === undefined)
+            window.fbLoaded.push(this.loadingPages);
+        else
+            this.loadingPages();
     }
 
     updateBar(valueadd, message = this.state.loadingBarStatus.message, color = this.state.loadingBarStatus.color) {
@@ -219,7 +228,6 @@ class PagesSection extends Component{
                                     this.setState({fetchedPages: this.state.fetchedPages + 1, associationList: assocList});
                                 })
                             }
-                            this.setState({readyToRender: true});
                         }
                     )
                 } else {
@@ -257,8 +265,8 @@ class PagesSection extends Component{
                             </div>
                             <div className={"flexbox vcenter hcenter"}>
                                 <BigButton className={"greenBtn removeTextOnSmall"}
-                                           onClick={() => this.connectBot(page)}><Icon path={mdiRobot} size={1}
-                                                                                       color={"#ffffff"}/><span>Connect bot to page</span></BigButton>
+                                           onClick={() => this.props.connect(page)}><Icon path={mdiRobot} size={1}
+                                                                                          color={"#ffffff"}/><span>Connect bot to page</span></BigButton>
                             </div>
                         </div>
                         <hr className={"hSeparator"}/>
@@ -316,27 +324,37 @@ class ChannelSection extends Component {
     };
 
     render() {
-        return (<div style={{margin: '2rem auto'}}>
-            <h2 style={{color: "#686868"}}>Choose your channel</h2>
-            <Row>
-                <Col sm={12} md={4} style={{textAlign: "center"}}>
-                    <this.ChannelButton id={"messenger"} icon={mdiFacebookMessenger} active_color={"#0084FF"}
-                                        className={"messenger"}
-                                        onClick={() => this.props.updateChannel('messenger')}
-                                        active={this.channelEnabled("messenger")}/>
-                </Col>
-                <Col sm={12} md={4} style={{textAlign: "center"}}>
-                    <this.ChannelButton id={"twitter"} icon={mdiTwitter} active_color={"#38A1F3"} className={"twitter"}
-                                        onClick={() => this.props.updateChannel("twitter")}
-                                        active={this.channelEnabled("twitter")}/>
-                </Col>
-                <Col sm={12} md={4} style={{textAlign: "center"}}>
-                    <this.ChannelButton id={"email"} icon={mdiEmail} active_color={"#121212"} className={"email"}
-                                        onClick={() => this.props.updateChannel("email")}
-                                        active={this.channelEnabled("email")}/>
-                </Col>
-            </Row>
-        </div>);
+        return (
+            <div style={{margin: '2rem auto'}}>
+                <h2 style={{color: "#686868"}}>Choose your channel</h2>
+                <Row>
+                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                        <this.ChannelButton id={"messenger"} icon={mdiFacebookMessenger} active_color={"#0084FF"}
+                                            className={"messenger"}
+                                            onClick={() => this.props.updateChannel('messenger')}
+                                            active={this.channelEnabled("messenger")}/>
+                    </Col>
+                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                        <this.ChannelButton id={"twitter"} icon={mdiTwitter} active_color={"#38A1F3"}
+                                            className={"twitter"}
+                                            onClick={() => this.props.updateChannel("twitter")}
+                                            active={this.channelEnabled("twitter")}/>
+                    </Col>
+                    <Col sm={12} md={4} style={{textAlign: "center"}}>
+                        <this.ChannelButton id={"email"} icon={mdiEmail} active_color={"#121212"} className={"email"}
+                                            onClick={() => this.props.updateChannel("email")}
+                                            active={this.channelEnabled("email")}/>
+                    </Col>
+                </Row>
+                <div className={"channelOptions"}>
+                    {this.channelEnabled('messenger') &&
+                    <CollapsibleTitle>
+                        <h3 style={{fontSize: "1.5em"}}>Messenger attributes</h3>
+                        <div>Content</div>
+                    </CollapsibleTitle>}
+                </div>
+            </div>
+        );
     }
 
 }

@@ -4,6 +4,7 @@ import {Icon} from '@mdi/react'
 import {mdiMenuLeft} from '@mdi/js'
 
 import "../styles/CollapsibleTitle.css"
+import "../styles/separator.css"
 import "../styles/utils.css"
 
 import {Badge, Collapse} from "reactstrap";
@@ -33,31 +34,28 @@ class CollapsibleTitle extends Component {
         return (
             <div style={{width: '100%', ...this.props.style}}>
                 <div className="collapsible-title" onClick={this.toggleCollapsible}>
-                    {(typeof this.props.title === "string") ? <h2>{this.props.title}</h2> : this.props.title}
-                    {this.props.notification &&
-                    <Badge color="danger" className="collapsible-notif">{this.props.notification}</Badge>}
-                    {this.props.icon &&
-                    <Icon className="collapsible-icon" path={this.props.icon}
-                          size={this.props.icon_size} color={this.props.icon_color}
-                          style={{
-                              transformOrigin: 'center center',
-                              transform: `rotate(${this.state.rotation}deg)`,
-                              WebkitTransform: `rotate(${this.state.rotation}deg)`
-                          }
-                          }
-                    />}
+                    <div style={{flexGrow: 1}}>
+                        {this.props.children[0]}
+                    </div>
+                    <div>
+                        <Icon className="collapsible-icon" path={mdiMenuLeft} size={1.5} color={"#999999"}
+                              style={{
+                                  transform: `rotate(${this.state.rotation}deg)`,
+                                  WebkitTransform: `rotate(${this.state.rotation}deg)`
+                              }}/>
+                    </div>
                 </div>
                 <Collapse className="collapsible-content" isOpen={this.state.openedCollapsible}>
-                    {this.props.children}
+                    {this.props.children[1]}
                 </Collapse>
-                {this.props.separator && <hr/>}
+                {this.props.separator && <hr className={"hSeparator"}/>}
             </div>
         );
     }
 }
 
 CollapsibleTitle.propTypes = {
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     icon: PropTypes.string,
     icon_size: PropTypes.number,
     icon_color: PropTypes.string,

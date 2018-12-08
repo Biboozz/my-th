@@ -53,13 +53,13 @@ div.vr {
 }
 
 .greenBtn:active {
-    background: #60783b;
+    background: #60783b !important;
     border-color: transparent !important;
 }
 
 .roundBtn {
     border-radius: 50%;
-    height: 4rem;
+    min-height: 4rem;
     min-width: 4rem;
     line-height: 1em;
     margin: auto;
@@ -68,4 +68,22 @@ div.vr {
     justify-content: center;
     transition: font-weight .5s, background-color .5s;
     box-shadow: none !important;
+}
+
+.roundBtn.small {
+    min-height: 3.1rem;
+    min-width: 3.1rem;
+
+}
+
+.flexbox {
+    display: flex;
+}
+
+.flexbox.vcenter {
+    align-items: center;
+}
+
+.flexbox.hcenter {
+    justify-content: center;
 }

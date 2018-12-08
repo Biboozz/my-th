@@ -12,18 +12,6 @@ span.associationName {
     font-weight: bold;
 }
 
-.flexbox {
-    display: flex;
-}
-
-.flexbox.vcenter {
-    align-items: center;
-}
-
-.flexbox.hcenter {
-    justify-content: center;
-}
-
 @media (max-width: 766px) {
     .removeTextOnSmall > span {
         display: none;
@@ -41,6 +29,9 @@ span.associationName {
     box-shadow: none !important;
 }
 
+.channelOptions {
+    margin: 2em auto;
+}
 
 .channelButton:disabled {
     background: transparent !important;

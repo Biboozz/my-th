@@ -7,6 +7,7 @@ import CampaignCreationStep1 from "./step1";
 import CampaignCreationStep2 from "./step2";
 import requireStateKey from "../../../components/requireStateKey";
 import CampaignCreationStep3 from "./step3";
+import CampaignCreationStep4 from "./step4";
 
 class Routes extends Component {
     render() {
@@ -20,6 +21,8 @@ class Routes extends Component {
                            component={requireStateKey("prefill", `${this.props.match.url}/step1`, CampaignCreationStep2)}/>
                     <Route exact path={`${this.props.match.url}/step3`}
                            component={requireStateKey("prefill", `${this.props.match.url}/step1`, CampaignCreationStep3)}/>
+                    <Route exact path={`${this.props.match.url}/step4`}
+                           component={requireStateKey("prefill", `${this.props.match.url}/step1`, CampaignCreationStep4)}/>
                     <Route component={e404}/>
                 </Switch>
             </div>
