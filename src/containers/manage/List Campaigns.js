@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Table} from "reactstrap";
+import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
 import {Icon} from '@mdi/react'
 import {mdiFacebookMessenger, mdiTwitter, mdiEmail, mdiAlert, mdiPen, mdiTrashCan} from '@mdi/js'
 
@@ -68,9 +68,25 @@ class ListTableEntry extends Component {
         });
 
         this.state = {
-            icons: icons
+            icons: icons,
+            deleteModal: false,
+            fieldDelete: null
         }
     }
+
+    toggleDeleteModal = () => {
+        this.setState({
+            deleteModal: !this.state.deleteModal
+        })
+    };
+
+    deleteFieldChange = (event) => {
+        this.setState({fieldDelete: event.target.value})
+    };
+
+    deleteCampaign = (campaign) => {
+        console.log("Campain deletion: ", campaign)
+    };
 
     render() {
         let c = this.props.campaign;
@@ -85,8 +101,39 @@ class ListTableEntry extends Component {
                     <td>TODO</td>
                     <td>TODO</td>
                     <td>{c.gameSettings.typeName}</td>
-                    <td><Link to={`/manage/${c.id}`}><Button><Icon path={mdiPen} color={"#ffffff"} size={1}/></Button></Link></td>
-                    <td><Button outline color={"danger"}><Icon path={mdiTrashCan} color={"#ffffff"} size={1}/></Button></td>
+                    <td><Link to={`/manage/${c.id}`}><Button color={'primary'}><Icon path={mdiPen} color={"#ffffff"}
+                                                                                     size={1}/></Button></Link></td>
+                    <td><Button outline color={"danger"} onClick={this.toggleDeleteModal}><Icon path={mdiTrashCan}
+                                                                                                color={"#ffffff"}
+                                                                                                size={1}/></Button>
+                    </td>
+                    <Modal isOpen={this.state.deleteModal} toggle={this.toggleDeleteModal}>
+                            <ModalHeader toggle={this.toggleDeleteModal}>You cannot undo this action</ModalHeader>
+                            <ModalBody>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                    incididunt
+                                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                    ullamco
+                                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                    reprehenderit in
+                                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                                    laborum.
+                                </p>
+                                <p><b>
+                                    Enter your campaign name to validate deletion:
+                                </b></p>
+                                <FormGroup>
+                                    <Input onChange={this.deleteFieldChange} invalid={this.state.fieldDelete !== c.name} valid={this.state.fieldDelete === c.name}/>
+                                </FormGroup>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" onClick={this.deleteCampaign(c)}
+                                        disabled={this.state.fieldDelete !== c.name}>Delete</Button>
+                                <Button color="secondary" onClick={this.toggleDeleteModal}>Cancel</Button>
+                            </ModalFooter>
+                    </Modal>
                 </tr>
             );
     }

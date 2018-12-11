@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default {
     s3: {
         REGION: "us-east-2",
@@ -22,3 +24,16 @@ export const urls = {
 };
 
 export const botNameMaxLength = 50;
+
+export const myThApiBase = "https://fzz8vv474j.execute-api.eu-west-3.amazonaws.com";
+
+export function myThApi(path, data, type = "GET", config = null, prefix = "/prod") {
+    if (type === "GET" && data.constructor === Array) {
+        let dataTmp = data.join("/");
+        return axios.get(myThApiBase + prefix + path + "/" + dataTmp, config)
+    }
+    else if (type === "POST" && data.constructor === Object) {
+        return axios.post(myThApiBase + prefix + path, data, config)
+    }
+    return null;
+}
