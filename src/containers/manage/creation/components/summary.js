@@ -11,7 +11,7 @@ export class SummaryGame extends Summary {
         return (
             <FormGroup>
                 <Label for="gameSummary">Experience</Label>
-                <Input type="select" name="gameSummary" disabled
+                <Input className={"informative_field"} type="select" name="gameSummary" disabled
                        defaultValue={this.props.value}>
                     <option value={"sweepstake"}>Sweepstake</option>
                     <option value={"instantwin"}>Instant win</option>
@@ -29,7 +29,7 @@ export class SummaryStatus extends Summary {
         return (
             <FormGroup>
                 <Label for="statusSummary">Status</Label>
-                <Input type="select" name="statusSummary" disabled
+                <Input className={"informative_field"} type="select" name="statusSummary" disabled
                        defaultValue={this.props.value}>
                     <option value={1}>Test</option>
                     <option value={2}>Active</option>
@@ -45,7 +45,7 @@ export class BotNameSummary extends Summary {
     render() {
         return (<FormGroup>
             <Label for="botNameSummary">Name</Label>
-            <Input name="botNameSummary" disabled
+            <Input name="botNameSummary" disabled className={"informative_field"}
                    defaultValue={this.props.value}>
             </Input>
         </FormGroup>)

@@ -97,8 +97,8 @@ class CampaignCreationStep1 extends Component {
                     </Row>
                 </div>
                 <div>
-                    <Link to={{pathname: `step2`, state: {prefill: this.state.prefill}}}>
-                        <Button className={"NavigationButton NextButton"}
+                    <Link to={{pathname: `/manage/create/step2`, state: {prefill: this.state.prefill}}}>
+                        <Button className={"NavigationButton NextButton greenBtn"}
                                 disabled={!(this.state.prefill.experience && this.state.prefill.game)}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>

@@ -146,13 +146,13 @@ class CampaignCreationStep3 extends Component {
                         <FinalMessage onChange={this.updatePrefill} value={this.state.prefill.finalMessage}/>
 
                         <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
-                            <Button className={"NavigationButton NextButton"} type={"submission"}>
+                            <Button className={"NavigationButton NextButton greenBtn"} type={"submission"}>
                                 Next
                                 <Icon path={mdiSkipNext} size={1}/>
                             </Button>
                             <div style={{flexGrow: 1}}/>
-                            <Link to={{pathname: `step2`, state: {prefill: this.state.prefill}}}>
-                                <Button className={"NavigationButton BackButton"}>
+                            <Link to={{pathname: `/step2`, state: {prefill: this.state.prefill}}}>
+                                <Button className={"NavigationButton BackButton greenBtn"}>
                                     Back
                                     <Icon path={mdiSkipPrevious} size={1}/>
                                 </Button>

@@ -24,8 +24,7 @@ class ListCampaigns extends Component {
                         <th># Interactions</th>
                         <th>Unique users</th>
                         <th>Type</th>
-                        <th></th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -101,9 +100,9 @@ class ListTableEntry extends Component {
                     <td>TODO</td>
                     <td>TODO</td>
                     <td>{c.gameSettings.typeName}</td>
-                    <td><Link to={`/manage/${c.id}`}><Button color={'primary'}><Icon path={mdiPen} color={"#ffffff"}
-                                                                                     size={1}/></Button></Link></td>
-                    <td><Button outline color={"danger"} onClick={this.toggleDeleteModal}><Icon path={mdiTrashCan}
+                    <td><Link to={`/manage/${c.id}`}><Button className={"greenBtn roundBtn small"} style={{margin:"auto .2rem"}}><Icon path={mdiPen} color={"#ffffff"}
+                                                                                     size={1}/></Button></Link>
+                    <Button outline onClick={this.toggleDeleteModal} className={"roundBtn small"} style={{margin:"auto .2rem"}}><Icon path={mdiTrashCan}
                                                                                                 color={"#ffffff"}
                                                                                                 size={1}/></Button>
                     </td>

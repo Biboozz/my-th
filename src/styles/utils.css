@@ -87,3 +87,15 @@ div.vr {
 .flexbox.hcenter {
     justify-content: center;
 }
+@media (min-width: 800px) {
+    .on-small-only {
+        display: none;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .hide-on-small {
+        display: none;
+    }
+}

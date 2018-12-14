@@ -5,7 +5,7 @@ import Routes from "./Routes";
 class CampaignCreationMaster extends Component {
     render() {
         return (
-            <Container>
+            <Container className={"create-campaign-wrapper"}>
                 <Routes match={this.props.match}/>
             </Container>
         );

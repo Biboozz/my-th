@@ -1,15 +1,15 @@
-button.purple {
+.launchButton.purple {
     background: #B88BC6;
     color: #ffffff;
     border-color: transparent !important;
     box-shadow: none !important;
 }
 
-button.purple:hover {
+.launchButton.purple:hover {
     background: #916e9d !important;
 }
 
-button.purple:active {
+.launchButton.purple:active {
     background: #72567b !important;
     border-color: transparent !important;
 }

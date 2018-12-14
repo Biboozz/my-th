@@ -96,13 +96,13 @@ class CampaignCreationStep2 extends Component {
                         </Col>
                     </Row>
                     <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
-                        <Button className={"NavigationButton NextButton"}>
+                        <Button className={"NavigationButton NextButton greenBtn"}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>
                         </Button>
                         <div style={{flexGrow: 1}}/>
-                        <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
-                            <Button className={"NavigationButton BackButton"}>
+                        <Link to={{pathname: `/step1`, state: {prefill: this.state.prefill}}}>
+                            <Button className={"NavigationButton BackButton greenBtn"}>
                                 Back
                                 <Icon path={mdiSkipPrevious} size={1}/>
                             </Button>
@@ -153,7 +153,7 @@ class StartDate extends Field {
         return (
             <FormGroup>
                 <Label for="startDate">Start date *</Label>
-                <Input onChange={this.props.onChange} type="date" id="startDate" name="startDate"
+                <Input onChange={this.props.onChange} type="datetime" id="startDate" name="startDate"
                        value={this.props.value} required/>
             </FormGroup>
         );
@@ -165,7 +165,7 @@ class EndDate extends Field {
         return (
             <FormGroup>
                 <Label for="startDate">End date *</Label>
-                <Input onChange={this.props.onChange} type="date" id="endDate" name="endDate"
+                <Input onChange={this.props.onChange} type="datetime" id="endDate" name="endDate"
                        value={this.props.value} required/>
             </FormGroup>
         );

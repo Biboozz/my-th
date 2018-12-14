@@ -34,6 +34,9 @@ export default class CampaignCreationStep4 extends Component {
         this.state = {
             prefill: props.location.state.prefill
         }
+
+        if (props.location.state.prefill.watermark === undefined)
+            this.state.prefill.watermark = true;
     }
 
     addLot = (event) => {
@@ -80,6 +83,14 @@ export default class CampaignCreationStep4 extends Component {
         });
     };
 
+    updateCheckbox = (event) => {
+        this.setState({
+            prefill: produce(this.state.prefill, draftPrefill => {
+                draftPrefill.watermark = event.target.checked;
+            })
+        });
+    }
+
     render() {
         return (
             <div>
@@ -125,16 +136,18 @@ export default class CampaignCreationStep4 extends Component {
                     <div>
                         <Row>
                             <Col sm={4}>
-                                <Button style={{width: "100%", height: '100%'}} className={'launchButton greenBtn'}>
+                                <Button style={{width: "100%", height: '100%'}} className={'launchButton greenBtn'} type={"button"}>
                                     <span>Save as test</span>
                                 </Button>
                             </Col>
                             <Col sm={{size: 7, offset: 1}}>
-                                <Button style={{width: "100%", height: '100%'}} className={'launchButton purple'}>
+                                <Button style={{width: "100%", height: 'auto'}} type={"button"} className={"launchButton purple"}>
                                     <span>Launch your fun bot</span>
-                                    <SwitchButton color={"#e4b7ea"} style={{margin: '1em auto'}}><span
-                                        style={{fontSize: "large"}}>No watermark</span></SwitchButton>
                                 </Button>
+                                <div style={{display: "block"}}>
+                                <SwitchButton color={"#e4b7ea"} style={{margin: '1em auto auto auto'}} onChange={this.updateCheckbox} checked={this.state.prefill.watermark}><span
+                                    style={{fontSize: "large"}}>{this.state.prefill.watermark ? "Watermark" : "No watermark"}</span></SwitchButton>
+                                </div>
                             </Col>
                         </Row>
                         <div className={"separatorBtnTxt"}/>
@@ -155,7 +168,7 @@ export default class CampaignCreationStep4 extends Component {
 
                     <div style={{display: 'flex', flexFlow: "row nowrap"}}>
                         <Link to={{pathname: `step3`, state: {prefill: this.state.prefill}}}>
-                            <Button className={"NavigationButton BackButton"}>
+                            <Button className={"NavigationButton BackButton greenBtn"}>
                                 Back
                                 <Icon path={mdiSkipPrevious} size={1}/>
                             </Button>
