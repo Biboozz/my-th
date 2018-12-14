@@ -19,7 +19,7 @@ class SwitchButton extends Component {
         return (
             <div style={{display: 'flex', justifyContent: 'center', ...style}} {...nProps}>
                 <label className="switch" style={{margin: (children) ? "auto .5em" : "auto"}}>
-                    <input type="checkbox" onChange={(event) => {this.setState({checked: event.target.checked}); onChange(event);}}/>
+                    <input type="checkbox" onChange={(event) => {this.setState({checked: event.target.checked}); onChange(event);}} checked={this.state.checked}/>
                     <span className="slider round" style={{background : this.state.checked ? (color) : (this.defaultColor)}}/>
                 </label>
                 {children}
