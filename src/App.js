@@ -84,7 +84,7 @@ class App extends Component {
                         }}/>
                         <Collapse navbar style={{paddingRight: "5em"}} isOpen={this.state.openedSidenav}>
                             <Nav className="ml-auto main-navbar" navbar>
-                                <NavItem><Link to={"/"}>About us</Link></NavItem>
+                                <NavItem><Link to={"/features"}>Features</Link></NavItem>
                                 <NavItem><Link to={"/manage"}>Manage your campaigns</Link></NavItem>
                                 <UserNavItem/>
                             </Nav>

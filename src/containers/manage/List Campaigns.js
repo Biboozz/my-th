@@ -110,6 +110,7 @@ class ListTableEntry extends Component {
                     <Modal isOpen={this.state.deleteModal} toggle={this.toggleDeleteModal}>
                             <ModalHeader toggle={this.toggleDeleteModal}>You cannot undo this action</ModalHeader>
                             <ModalBody>
+                                {/*TODO: Make text*/}
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                     incididunt

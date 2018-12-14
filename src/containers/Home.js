@@ -1,17 +1,16 @@
 import React, {Component} from "react"
 
 import "../styles/wrappers.css"
+import {Redirect} from "react-router-dom";
+import {connect} from "react-redux";
+import {stateToUserProps} from "../reducers/user";
 
-export default class Home extends Component{
+export class Home extends Component{
     render() {
         return (
-            <div id="Home">
-                <div className="test_text">
-                    <h1>My-TreasureHunt</h1>
-                    <p> Fun bots to enrich your visuals
-                        boost the engagement of your fans</p>
-                </div>
-            </div>
+            this.props.user.isAuthenticated ?<Redirect to={"/manage"} /> : <Redirect to={"/login"} />
         );
     }
 }
+
+export default connect(stateToUserProps) (Home)

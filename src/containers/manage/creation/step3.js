@@ -121,10 +121,10 @@ class CampaignCreationStep3 extends Component {
                                   selectedPage={this.state.prefill.page}/>
 
                     <div style={{margin: '2rem auto'}}>
-                        <h2 style={{color: "#686868"}}>You bot messages</h2>
+                        <h2 style={{color: "#686868"}}>Your bot messages</h2>
                         <div style={{marginBottom: '1em'}}>
                             <FirstMessage onChange={this.updatePrefill} value={this.state.prefill.firstMessage}/>
-                            <span>Image with you first message (optional)</span><Icon path={mdiPlusCircle}
+                            <span>Image with your first message (optional)</span><Icon path={mdiPlusCircle}
                                                                                       size={1} color={"#111111"}
                                                                                       style={{margin: ".5em"}}/>
                         </div>
@@ -418,7 +418,7 @@ class DefaultMessage extends Field {
     render() {
         return (
             <FormGroup>
-                <Label for={"defaultMessage"}>Default Message</Label>
+                <Label for={"defaultMessage"}>Default Message *</Label>
                 <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
@@ -432,7 +432,7 @@ class FinalMessage extends Field {
     render() {
         return (
             <FormGroup>
-                <Label for={"finalMessage"}>Final Message</Label>
+                <Label for={"finalMessage"}>Final Message *</Label>
                 <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
