@@ -3,19 +3,20 @@ import connect from "react-redux/es/connect/connect";
 import PropTypes from 'prop-types'
 import {stateToUserProps} from "../../../reducers/user";
 import {getAuthResponse, getPagePicture, getPermissions, getUserPages} from "../../../facebookUtilities";
-import {Button, Form, FormGroup, Input, Label, Progress, Row, Col} from "reactstrap";
+import {Button, Col, Form, FormGroup, Input, Label, Progress, Row} from "reactstrap";
 import ImageLoader from "react-load-image";
 import Spinner from 'react-spinner-material';
 import {Icon} from '@mdi/react'
 import {
+    mdiEmail,
+    mdiFacebookMessenger,
     mdiImage,
+    mdiInformation, mdiInformationOutline,
     mdiPlusCircle,
     mdiRobot,
     mdiSkipNext,
     mdiSkipPrevious,
-    mdiFacebookMessenger,
-    mdiTwitter,
-    mdiEmail
+    mdiTwitter
 } from '@mdi/js'
 
 import '../../../styles/campaignCreation/global.css'
@@ -121,12 +122,24 @@ class CampaignCreationStep3 extends Component {
                                   selectedPage={this.state.prefill.page}/>
 
                     <div style={{margin: '2rem auto'}}>
-                        <h2 style={{color: "#686868"}}>Your bot messages</h2>
+                        <div>
+                            <Row>
+                                <Col sm={12} md={6}>
+                                    <h2 style={{color: "#686868"}}>Your bot messages</h2>
+                                </Col>
+                                <Col sm={12} md={6} className={'flexbox vcenter'}>
+                                    <a href={"https://my-treasurehunt.com/"} target={"_blank"}>
+                                        <Icon path={mdiInformationOutline} color={"#98be5d"} size={1} style={{margin:'auto 1em'}} className={"green"}/>
+                                        <span style={{color: "#999999", textDecoration: 'none !important'}}>Learn about the messages in the experience</span>
+                                    </a>
+                                </Col>
+                            </Row>
+                        </div>
                         <div style={{marginBottom: '1em'}}>
                             <FirstMessage onChange={this.updatePrefill} value={this.state.prefill.firstMessage}/>
                             <span>Image with your first message (optional)</span><Icon path={mdiPlusCircle}
-                                                                                      size={1} color={"#111111"}
-                                                                                      style={{margin: ".5em"}}/>
+                                                                                       size={1} color={"#111111"}
+                                                                                       style={{margin: ".5em"}}/>
                         </div>
                         <AnalysisMessage onChange={this.updatePrefill} value={this.state.prefill.analysisMessage}/>
 
@@ -274,7 +287,8 @@ class PagesSection extends Component {
                             </div>
                             <div className={"flexbox vcenter hcenter"}>
                                 <BigButton className={"greenBtn removeTextOnSmall"}
-                                           onClick={() => this.props.connect(page)} disabled={this.disabledButton(page)}>
+                                           onClick={() => this.props.connect(page)}
+                                           disabled={this.disabledButton(page)}>
                                     <Icon path={mdiRobot} size={1}
                                           color={"#ffffff"}/>
                                     <span>Connect bot to page</span>
@@ -394,7 +408,7 @@ class AnalysisMessage extends Field {
                 <Input type={"textarea"} id={"analysisMessage"} name={"analysisMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
-                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+                       placeholder={"It appears every time when a user sent a message"}/>
             </FormGroup>
         );
     }
@@ -408,7 +422,7 @@ class NoMatchMessage extends Field {
                 <Input type={"textarea"} id={"noMatchMessage"} name={"noMatchMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
-                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+                       placeholder={"It appears every time when a user sent an unknown pic"}/>
             </FormGroup>
         );
     }
@@ -422,7 +436,7 @@ class DefaultMessage extends Field {
                 <Input type={"textarea"} id={"defaultMessage"} name={"defaultMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
-                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+                       placeholder={"It appears every time when the bot doesn't understand the user message. For example, if a user sends some text, the bot will use this default message to answer."}/>
             </FormGroup>
         );
     }
@@ -436,7 +450,7 @@ class FinalMessage extends Field {
                 <Input type={"textarea"} id={"finalMessage"} name={"finalMessage"} required
                        value={this.props.value}
                        onChange={this.props.onChange}
-                       placeholder={"Explain to your fans what are the goal and the rule of your experience."}/>
+                       placeholder={"This message will come just after the Match message. It's dedicated for sharing the experience, a share button will be displayed."}/>
             </FormGroup>
         );
     }
