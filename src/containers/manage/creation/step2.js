@@ -13,6 +13,7 @@ import {mdiImagePlus} from "@mdi/js/commonjs/mdi";
 import produce from "immer";
 import {SummaryGame, SummaryStatus} from "./components/summary";
 import Field from "./components/FieldGenericClass";
+import Summary from "./components/summary";
 
 class CampaignCreationStep2 extends Component {
 
@@ -53,21 +54,7 @@ class CampaignCreationStep2 extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
-                    <Row>
-                        <Col sm={12} lg={6}>
-                            <BotName onChange={this.updatePrefill} value={this.state.prefill.botName}/>
-                        </Col>
-                        <Col sm={12} lg={6}>
-                            <Row>
-                                <Col sm={6}>
-                                    <SummaryGame value={this.state.prefill.game}/>
-                                </Col>
-                                <Col sm={6}>
-                                    <SummaryStatus/>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                    <Summary prefill={this.state.prefill} fields={['game', 'status']}/>
                     <Row>
                         <Col sm={12} lg={6}>
                             <Email onChange={this.updatePrefill} value={this.state.prefill.contactEmail}/>

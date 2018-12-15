@@ -31,6 +31,7 @@ import User from "../../../classes/User";
 import CollapsibleTitle from "../../../components/CollapsibleTitle";
 import {BotNameSummary, SummaryGame, SummaryStatus} from "./components/summary";
 import Field from "./components/FieldGenericClass";
+import Summary from "./components/summary";
 
 const testAssociation = [
     {name: "Test1", cover: "https://picsum.photos/500/500/?image=1063", id: "idTest1"},
@@ -92,28 +93,7 @@ class CampaignCreationStep3 extends Component {
 
         return (
             <div style={{marginTop: '2rem'}}>
-                <Row>
-                    <Col sm={12} lg={6}>
-                        <Row>
-                            <Col sm={6}>
-                                <BotNameSummary value={this.state.prefill.botName}/>
-                            </Col>
-                            <Col sm={6}>
-                            </Col>
-                        </Row>
-
-                    </Col>
-                    <Col sm={12} lg={6}>
-                        <Row>
-                            <Col sm={6}>
-                                <SummaryGame value={this.state.prefill.game}/>
-                            </Col>
-                            <Col sm={6}>
-                                <SummaryStatus/>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
+                <Summary prefill={this.state.prefill} fields={['name', 'game', 'status']}/>
                 <Form onSubmit={this.handleSubmit}>
 
                     <ChannelSection prefillChannels={this.state.prefill.channels} updateChannel={this.toggleChannel}/>

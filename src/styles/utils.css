@@ -99,3 +99,13 @@ div.vr {
         display: none;
     }
 }
+
+a:hover {
+    color: #98be5d;
+    text-decoration-color: currentColor;
+}
+
+a:visited {
+    color: #60783b;
+    text-decoration-color: currentColor;
+}

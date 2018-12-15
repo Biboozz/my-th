@@ -18,6 +18,8 @@ import '../../../styles/campaignCreation/step4.css'
 import produce from "immer";
 import SwitchButton from "../../../components/switch";
 import Field from "./components/FieldGenericClass";
+import {BotNameSummary, ChannelsSummary, SummaryGame, SummaryStatus} from "./components/summary";
+import Summary from "./components/summary";
 
 function extractValue(dict, key, elseRet = null) {
     if (dict && key in dict) {
@@ -33,10 +35,7 @@ export default class CampaignCreationStep4 extends Component {
 
         this.state = {
             prefill: props.location.state.prefill
-        }
-
-        if (props.location.state.prefill.watermark === undefined)
-            this.state.prefill.watermark = true;
+        };
     }
 
     addLot = (event) => {
@@ -94,6 +93,7 @@ export default class CampaignCreationStep4 extends Component {
     render() {
         return (
             <div>
+                <Summary prefill={this.state.prefill} fields={['name', 'game', 'status','channels']}/>
                 <PrizeSection add={this.addLot} edit={this.editLot} prizes={this.state.prefill.prizes}/>
                 <Form>
 
