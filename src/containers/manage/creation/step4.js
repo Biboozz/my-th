@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import {Icon} from '@mdi/react'
 import {
     mdiAlert,
-    mdiAlertCircle,
+    mdiAlertCircle, mdiCheck,
     mdiImagePlus,
     mdiInformationVariant,
     mdiPen,
@@ -21,6 +21,7 @@ import SwitchButton from "../../../components/switch";
 import Field from "./components/FieldGenericClass";
 import {BotNameSummary, ChannelsSummary, SummaryGame, SummaryStatus} from "./components/summary";
 import Summary from "./components/summary";
+import {mdiClose, mdiTrashCan} from "@mdi/js/commonjs/mdi";
 
 function extractValue(dict, key, elseRet = null) {
     if (dict && key in dict) {
@@ -74,6 +75,18 @@ export default class CampaignCreationStep4 extends Component {
         })
     };
 
+    deletePrize = (event, id) => {
+        event.preventDefault();
+        this.setState({
+            prefill: produce(this.state.prefill, draftPrefill => {
+                if (!draftPrefill.prizes)
+                    draftPrefill.prizes = [];
+                if (draftPrefill.prizes[id])
+                    delete draftPrefill.prizes[id];
+            })
+        })
+    };
+
     updatePrefill = (event) => {
         console.log(this.state.prefill);
         this.setState({
@@ -89,13 +102,16 @@ export default class CampaignCreationStep4 extends Component {
                 draftPrefill.watermark = event.target.checked;
             })
         });
-    }
+    };
 
     render() {
         return (
             <div>
-                <Summary prefill={this.state.prefill} fields={['name', 'game', 'status','channels']}/>
-                <PrizeSection add={this.addLot} edit={this.editLot} prizes={this.state.prefill.prizes}/>
+                <Summary prefill={this.state.prefill} fields={['name', 'game', 'status', 'channels']}/>
+                {this.state.prefill.experience === "sweepstake" &&
+                <PrizeSection add={this.addLot} edit={this.editLot} delete={this.deletePrize}
+                              prizes={this.state.prefill.prizes}/>
+                }
                 <Form>
 
                     <PrizeWinMessage onChange={this.updatePrefill} value={this.state.prefill.prizeWinMessage}/>
@@ -137,17 +153,20 @@ export default class CampaignCreationStep4 extends Component {
                     <div>
                         <Row>
                             <Col sm={4}>
-                                <Button style={{width: "100%", height: '100%'}} className={'launchButton greenBtn'} type={"button"}>
+                                <Button style={{width: "100%", height: '100%'}} className={'launchButton greenBtn'}
+                                        type={"button"}>
                                     <span>Save as test</span>
                                 </Button>
                             </Col>
                             <Col sm={{size: 7, offset: 1}}>
-                                <Button style={{width: "100%", height: 'auto'}} type={"button"} className={"launchButton purple"}>
+                                <Button style={{width: "100%", height: 'auto'}} type={"button"}
+                                        className={"launchButton purple"}>
                                     <span>Launch your fun bot</span>
                                 </Button>
                                 <div style={{display: "block"}}>
-                                <SwitchButton color={"#e4b7ea"} style={{margin: '1em auto auto auto'}} onChange={this.updateCheckbox} checked={this.state.prefill.watermark}><span
-                                    style={{fontSize: "large"}}>{this.state.prefill.watermark ? "Watermark" : "No watermark"}</span></SwitchButton>
+                                    <SwitchButton color={"#e4b7ea"} style={{margin: '1em auto auto auto'}}
+                                                  onChange={this.updateCheckbox} checked={this.state.prefill.watermark}><span
+                                        style={{fontSize: "large"}}>{this.state.prefill.watermark ? "Watermark" : "No watermark"}</span></SwitchButton>
                                 </div>
                             </Col>
                         </Row>
@@ -185,15 +204,18 @@ class PrizeSection extends Component {
     static propTypes = {
         prizes: PropTypes.arrayOf(PropTypes.object),
         edit: PropTypes.func.isRequired,
-        add: PropTypes.func.isRequired
+        add: PropTypes.func.isRequired,
+        delete: PropTypes.func.isRequired
     };
 
     renderPrizeList() {
         let render = [];
         if (this.props.prizes)
             for (let i in this.props.prizes) {
-                render.push(<PrizeEntry handler={(event) => this.props.edit(event, i)} prize={this.props.prizes[i]}
-                                        key={i}/>);
+                if (this.props.prizes[i])
+                    render.push(<PrizeEntry handler={(event) => this.props.edit(event, i)}
+                                            delete={(event) => this.props.delete(event, i)} prize={this.props.prizes[i]}
+                                            key={i}/>);
             }
         return render;
     }
@@ -211,22 +233,82 @@ class PrizeSection extends Component {
 
 //TODO if prize filled rework ergonomy
 class PrizeEntry extends Component {
-    propTypes = {prize: PropTypes.object, handler: PropTypes.func.isRequired};
-    defaultProps = {prize: null};
+    static propTypes = {prize: PropTypes.object, handler: PropTypes.func.isRequired};
+    static defaultProps = {prize: null};
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            edit: false
+        }
+    }
+
+    handler = (event) => {
+        event.preventDefault();
+        this.props.handler(event);
+        this.setState({edit: !this.state.edit});
+    };
+
+
+    //TODO: FIX DAT SHIT TO RESET FORM!
+    getButtons = () => {
+        if (this.props.prize) {
+            if (this.state.edit) {
+                return (<div className={"flexbox vcenter"} style={{margin: '1em'}}>
+                    <Button style={{margin: 'auto .2em'}} className={"greenBtn roundBtn small"}>
+                        <Icon path={mdiCheck} size={1} key={"editBtn"}/>
+                    </Button>
+                    <Button style={{margin: 'auto .2em'}} className={"roundBtn small"} color={"danger"} outline
+                            onClick={() => {this.setState({edit: false});   this.myFormRef.reset();}}>
+                        <Icon path={mdiClose} size={1} key={"deleteBtn"}/>
+                    </Button>
+                </div>);
+            } else {
+                return (<div className={"flexbox vcenter"} style={{margin: '1em'}}>
+                    <Button style={{margin: 'auto .2em'}} className={"greenBtn roundBtn small"}>
+                        <Icon path={mdiPen} size={1} key={"editBtn"}/>
+                    </Button>
+                    <Button style={{margin: 'auto .2em'}} className={"roundBtn small"} color={"danger"} outline
+                            onClick={this.props.delete}>
+                        <Icon path={mdiTrashCan} size={1} key={"deleteBtn"}/>
+                    </Button>
+                </div>)
+            }
+        } else {
+            return (
+                <Button style={{margin: 'auto .5em'}}
+                        className={"greenBtn roundBtn"}><Icon path={mdiPlus} size={1}/>
+                </Button>
+            )
+        }
+    };
+
+    disableField(id) {
+//        debugger;
+        if (this.props.prize) {
+            if (!this.props.prize[id])
+                return false;
+            return !this.state.edit;
+        }
+        return false;
+    };
 
     render() {
-        let prefill = {name: null, description: null, quantity: 0};
+        let prefill = {name: null, description: null, quantity: null};
         if (this.props.prize) {
             prefill = Object.assign(prefill, this.props.prize);
         }
+        console.log("render:", prefill.name);
         return (
             <div style={{marginBottom: '2rem'}}>
-                <Form onSubmit={this.props.handler}>
+                <Form onSubmit={this.handler} ref={(el) => this.myFormRef = el}>
                     <Row form>
                         <Col sm={6} md={4}>
                             <FormGroup>
                                 <Label for={"lotName"}>Name *</Label>
                                 <Input id={"lotName"} name={"lotName"} required style={{height: '4em'}}
+                                       disabled={this.disableField('name')}
                                        defaultValue={prefill.name}/>
                             </FormGroup>
                         </Col>
@@ -234,6 +316,7 @@ class PrizeEntry extends Component {
                             <FormGroup>
                                 <Label for={"lotDescription"}>Short description *</Label>
                                 <Input type="textarea" id={"lotDescription"} name={"lotDescription"} required
+                                       disabled={this.disableField('description')}
                                        style={{height: '4em', resize: 'none'}}
                                        defaultValue={prefill.description}
                                        placeholder={"You can re-use this field as the variable [shortdescription] in the prize win message"}/>
@@ -243,32 +326,24 @@ class PrizeEntry extends Component {
                             <FormGroup>
                                 <Label for={"lotQuantity"}>Quantity *</Label>
                                 <Input type="number" id={"lotQuantity"} name={"lotQuantity"} required
+                                       disabled={this.disableField('quantity')}
                                        style={{height: '4em'}}
-                                       defaultValue={prefill.quantity}/>
+                                       defaultValue={prefill.quantity === null ? 0 : prefill.quantity}/>
                             </FormGroup>
                         </Col>
-                        <Col sm={12} md={2}>
+                        <Col sm={12} md={2} lg={3}>
                             <Row style={{height: '100%', margin: 'auto'}}>
                                 <div className="flexbox" style={{flexDirection: 'row-reverse'}}>
-                                    <Col sm={12} md={6} className={"flexbox vcenter hcenter"}>
-                                        {this.props.prize ?
-                                            <Button style={{margin: 'auto'}} className={"greenBtn roundBtn small"}><Icon
-                                                path={mdiPen}
-                                                size={1}/></Button>
-                                            :
-                                            <Button style={{margin: 'auto'}}
-                                                    className={"greenBtn roundBtn"}><Icon path={mdiPlus}
-                                                                                          size={1}/></Button>
-                                        }
-                                    </Col>
-                                    <Col sm={12} md={6} className={"flexbox vcenter hcenter"}>
-                                        <Button style={{margin: 'auto'}} onClick={() => console.log("Hey, Image upload !")}
-                                                className={"roundBtn small"}
-                                                type="button">
-                                            <Icon path={mdiImagePlus}
-                                                  size={1}/>
-                                        </Button>
-                                    </Col>
+                                    <div className="flexbox" style={{flexDirection: 'row-reverse'}}>
+                                        {this.getButtons()}
+                                    </div>
+                                    <Button style={{margin: 'auto .2em'}}
+                                            onClick={() => console.log("Hey, Image upload !")}
+                                            className={"roundBtn small"}
+                                            type="button">
+                                        <Icon path={mdiImagePlus}
+                                              size={1}/>
+                                    </Button>
                                 </div>
                             </Row>
                         </Col>

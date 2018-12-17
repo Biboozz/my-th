@@ -95,7 +95,7 @@ class CampaignCreationStep2 extends Component {
                             <Icon path={mdiSkipNext} size={1}/>
                         </Button>
                         <div style={{flexGrow: 1}}/>
-                        <Link to={{pathname: `/step1`, state: {prefill: this.state.prefill}}}>
+                        <Link to={{pathname: `step1`, state: {prefill: this.state.prefill}}}>
                             <Button className={"NavigationButton BackButton greenBtn"}>
                                 Back
                                 <Icon path={mdiSkipPrevious} size={1}/>
@@ -147,7 +147,7 @@ class StartDate extends Field {
         return (
             <FormGroup>
                 <Label for="startDate">Start date *</Label>
-                <Input onChange={this.props.onChange} type="datetime" id="startDate" name="startDate"
+                <Input onChange={this.props.onChange} type="datetime-local" id="startDate" name="startDate"
                        value={this.props.value} required/>
             </FormGroup>
         );
@@ -159,7 +159,7 @@ class EndDate extends Field {
         return (
             <FormGroup>
                 <Label for="startDate">End date *</Label>
-                <Input onChange={this.props.onChange} type="datetime" id="endDate" name="endDate"
+                <Input onChange={this.props.onChange} type="datetime-local" id="endDate" name="endDate"
                        value={this.props.value} required/>
             </FormGroup>
         );

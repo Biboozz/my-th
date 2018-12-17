@@ -26,7 +26,7 @@ export default class Summary extends Component {
                     <Col sm={12} lg={(firstPart) ? 6 : 12}>
                         <Row>
                             <Col sm={6}>
-                                {this.props.fields.includes("game") && <SummaryGame value={this.props.prefill.game}/>}
+                                {this.props.fields.includes("game") && <SummaryGame value={this.props.prefill.experience}/>}
                             </Col>
                             <Col sm={6}>
                                 {this.props.fields.includes("status") && <SummaryStatus/>}
@@ -50,6 +50,7 @@ export class SummaryGame extends SummaryComponent {
                 <Label for="gameSummary">Experience</Label>
                 <Input className={"informative_field"} type="select" name="gameSummary" disabled
                        defaultValue={this.props.value}>
+                    <option value={null}>None</option>
                     <option value={"sweepstake"}>Sweepstake</option>
                     <option value={"instantwin"}>Instant win</option>
                     <option value={"race"}>Race</option>
@@ -90,7 +91,7 @@ export class BotNameSummary extends SummaryComponent {
 }
 
 export class ChannelsSummary extends SummaryComponent {
-    static propTypes = {value: PropTypes.arrayOf(PropTypes.string).isRequired};
+    static propTypes = {value: PropTypes.any.isRequired};
     static defaultProps = {value: []};
 
     render() {

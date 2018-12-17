@@ -144,7 +144,7 @@ class CampaignCreationStep3 extends Component {
                                 <Icon path={mdiSkipNext} size={1}/>
                             </Button>
                             <div style={{flexGrow: 1}}/>
-                            <Link to={{pathname: `/step2`, state: {prefill: this.state.prefill}}}>
+                            <Link to={{pathname: `step2`, state: {prefill: this.state.prefill}}}>
                                 <Button className={"NavigationButton BackButton greenBtn"}>
                                     Back
                                     <Icon path={mdiSkipPrevious} size={1}/>

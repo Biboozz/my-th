@@ -28,7 +28,7 @@ class ListCampaigns extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.props.list.map(c => <ListTableEntry campaign={c} key={c.id}/>)}
+                    {this.props.list.slice(0,3).map(c => <ListTableEntry campaign={c} key={c.id}/>)}
                     </tbody>
                 </Table>
             </div>

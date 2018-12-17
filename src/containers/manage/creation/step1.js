@@ -16,7 +16,7 @@ class CampaignCreationStep1 extends Component {
 
         let prefill = {
             game: 0,
-            experience: 0
+            experience: null
         };
 
         if (props.location.state && props.location.state.prefill)
@@ -27,8 +27,11 @@ class CampaignCreationStep1 extends Component {
         }
     }
 
-    experienceSelect(id) {
-        this.setState({prefill: Object.assign(this.state.prefill, {experience: id})});
+    experienceSelect(id, active) {
+        if (active)
+            this.setState({prefill: Object.assign(this.state.prefill, {experience: id})});
+        else
+            this.setState({prefill: Object.assign(this.state.prefill, {experience: null})})
     }
 
     gameSelect(id) {
@@ -71,35 +74,29 @@ class CampaignCreationStep1 extends Component {
                 <div style={{marginTop: '2em'}}>
                     <Row>
                         <Col sm={12} lg={4}>
-                            <Button className={"greenBtn BigChoiceButton"}
-                                    disabled={this.state.prefill.experience === "sweepstake"}
-                                    onClick={() => this.experienceSelect("sweepstake")}>
+                            <ChoiceButton onChange={(active) => this.experienceSelect("sweepstake", active)} active={this.state.prefill.experience === "sweepstake"}>
                                 <h3>Sweepstake</h3>
                                 <span>Lorem Ipsum</span>
-                            </Button>
+                            </ChoiceButton>
                         </Col>
                         <Col sm={12} lg={4}>
-                            <Button className={"greenBtn BigChoiceButton"}
-                                    disabled={this.state.prefill.experience === "instantwin"}
-                                    onClick={() => this.experienceSelect("instantwin")}>
+                            <ChoiceButton onChange={(active) => this.experienceSelect("instantwin", active)} active={this.state.prefill.experience === "instantwin"}>
                                 <h3>Instant win</h3>
                                 <span>Lorem Ipsum</span>
-                            </Button>
+                            </ChoiceButton>
                         </Col>
                         <Col sm={12} lg={4}>
-                            <Button className={"greenBtn BigChoiceButton"}
-                                    disabled={this.state.prefill.experience === "race"}
-                                    onClick={() => this.experienceSelect("race")}>
+                            <ChoiceButton onChange={(active) => this.experienceSelect("race", active)} active={this.state.prefill.experience === "race"}>
                                 <h3>Race</h3>
                                 <span>Lorem Ipsum</span>
-                            </Button>
+                            </ChoiceButton>
                         </Col>
                     </Row>
                 </div>
                 <div>
                     <Link to={{pathname: `/manage/create/step2`, state: {prefill: this.state.prefill}}}>
                         <Button className={"NavigationButton NextButton greenBtn"}
-                                disabled={!(this.state.prefill.experience && this.state.prefill.game)}>
+                                disabled={!(this.state.prefill.game)}>
                             Next
                             <Icon path={mdiSkipNext} size={1}/>
                         </Button>
@@ -107,6 +104,20 @@ class CampaignCreationStep1 extends Component {
                 </div>
             </div>
         );
+    }
+}
+
+class ChoiceButton extends Component {
+    change = () => {
+        this.props.onChange(!this.props.active);
+    };
+
+    render() {
+        return (
+            <Button className={`greenBtn BigChoiceButton ${this.props.active ? "activeChoiceButton" : ""}`}
+                    onClick={this.change}>
+                {this.props.children}
+            </Button>)
     }
 }
 
