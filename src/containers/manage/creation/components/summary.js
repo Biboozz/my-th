@@ -9,10 +9,11 @@ export default class Summary extends Component {
     static defaultProps = {fields: []};
 
     render() {
+        let firstPart = this.props.fields.includes("name") || this.props.fields.includes("channels");
         if (this.props.fields.length > 0) {
             return (
                 <Row>
-                    <Col sm={12} lg={6}>
+                    {firstPart && <Col sm={12} lg={6}>
                         <Row>
                             <Col sm={6}>
                                 {this.props.fields.includes("name") && <BotNameSummary value={this.props.prefill.botName}/>}
@@ -21,8 +22,8 @@ export default class Summary extends Component {
                                 {this.props.fields.includes("channels") && <ChannelsSummary value={this.props.prefill.channels}/>}
                             </Col>
                         </Row>
-                    </Col>
-                    <Col sm={12} lg={6}>
+                    </Col>}
+                    <Col sm={12} lg={(firstPart) ? 6 : 12}>
                         <Row>
                             <Col sm={6}>
                                 {this.props.fields.includes("game") && <SummaryGame value={this.props.prefill.game}/>}

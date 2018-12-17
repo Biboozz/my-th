@@ -4,6 +4,7 @@ import {Alert, Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap
 import {Link} from "react-router-dom";
 import {Icon} from '@mdi/react'
 import {
+    mdiAlert,
     mdiAlertCircle,
     mdiImagePlus,
     mdiInformationVariant,
@@ -101,7 +102,7 @@ export default class CampaignCreationStep4 extends Component {
 
                     {/*TODO: Messenger form*/}
 
-                    <Alert color={'secondary'}>
+                    <Alert className={"infoAlert"}>
                         <Row style={{width: '95%'}}>
                             <Col xs={3} md={2} lg={1}>
                                 <Icon path={mdiInformationVariant} color={"#686868"} style={{width: '100%'}}/>
@@ -119,10 +120,10 @@ export default class CampaignCreationStep4 extends Component {
                         </Row>
                     </Alert>
 
-                    <Alert color={'danger'}>
+                    <Alert color={'primary'} className={"warningAlert"}>
                         <Row style={{width: '95%'}}>
                             <Col xs={3} md={2} lg={1}>
-                                <Icon path={mdiAlertCircle} color={"#d20000"} style={{width: '100%'}}/>
+                                <Icon path={mdiAlert} color={"#d20000"} style={{width: '100%'}}/>
                             </Col>
                             <Col xs={9} md={10} lg={11}>
                                 <p style={{margin: 'auto'}}>
@@ -153,7 +154,7 @@ export default class CampaignCreationStep4 extends Component {
                         <div className={"separatorBtnTxt"}/>
                         <Row>
                             <Col sm={4}>
-                                <p>As the developer or your bot, you can test it by sending messages and adjust your
+                                <p>As the developer of your bot, you can test it by sending messages and adjust your
                                     settings.</p>
                             </Col>
                             <Col sm={{size: 7, offset: 1}}>

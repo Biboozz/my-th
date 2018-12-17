@@ -54,7 +54,14 @@ class CampaignCreationStep2 extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
-                    <Summary prefill={this.state.prefill} fields={['game', 'status']}/>
+                    <Row>
+                        <Col lg={6} sm={12}>
+                            <BotName onChange={this.updatePrefill} value={this.state.prefill.botName}/>
+                        </Col>
+                        <Col lg={6} sm={12}>
+                            <Summary prefill={this.state.prefill} fields={['game', 'status']}/>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col sm={12} lg={6}>
                             <Email onChange={this.updatePrefill} value={this.state.prefill.contactEmail}/>
