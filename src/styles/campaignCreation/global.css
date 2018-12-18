@@ -37,7 +37,7 @@
 }
 
 .create-campaign-wrapper input {
-    border: 1px solid #8aac54;
+    border: 1px solid #8aac54 !important;
     transition: box-shadow 0.5s ease-in-out, border 0.3s;
 }
 
@@ -54,18 +54,21 @@
 
 
 .create-campaign-wrapper textarea {
-    border: 1px solid #8aac54;
+    border: 1px solid #8aac54 !important;
     transition: box-shadow 0.5s ease-in-out, border-color .3s !important;
 }
 
 .create-campaign-wrapper textarea:invalid {
-    border: inherit;
     transition: none !important;
 }
 
 .create-campaign-wrapper textarea:focus {
     box-shadow: 0 0 1.5px 1px rgba(146, 184, 90, 0.26);
     border: 1px solid #9dc460;
+}
+
+.informative_field:disabled {
+    border: none !important;
 }
 
 .informative_field {

@@ -9,9 +9,7 @@ import Spinner from 'react-spinner-material';
 import {Icon} from '@mdi/react'
 import {
     mdiEmail,
-    mdiFacebookMessenger,
-    mdiImage,
-    mdiInformation, mdiInformationOutline,
+    mdiFacebookMessenger, mdiImage, mdiInformationOutline,
     mdiPlusCircle,
     mdiRobot,
     mdiSkipNext,
@@ -29,15 +27,14 @@ import {Link, Redirect} from "react-router-dom";
 import produce from "immer";
 import User from "../../../classes/User";
 import CollapsibleTitle from "../../../components/CollapsibleTitle";
-import {BotNameSummary, SummaryGame, SummaryStatus} from "./components/summary";
-import Field from "./components/FieldGenericClass";
 import Summary from "./components/summary";
+import Field from "./components/FieldGenericClass";
 
 const testAssociation = [
     {name: "Test1", cover: "https://picsum.photos/500/500/?image=1063", id: "idTest1"},
     {name: "Test2", cover: "https://picsum.photos/500/500/?image=598", id: "idTest2"}];
 
-class CampaignCreationStep3 extends Component {
+export default class CampaignCreationStep3 extends Component {
 
     constructor(props) {
         super(props);
@@ -96,61 +93,20 @@ class CampaignCreationStep3 extends Component {
                 <Summary prefill={this.state.prefill} fields={['name', 'game', 'status']}/>
                 <Form onSubmit={this.handleSubmit}>
 
-                    <ChannelSection prefillChannels={this.state.prefill.channels} updateChannel={this.toggleChannel}/>
+                    <ChannelSection updateChannel={this.toggleChannel} prefill={this.state.prefill} onFieldChange={this.updatePrefill}/>
 
-                    <PagesSection user={this.props.user} connect={this.connectBot}
-                                  selectedPage={this.state.prefill.page}/>
-
-                    <div style={{margin: '2rem auto'}}>
-                        <div>
-                            <Row>
-                                <Col sm={12} md={6}>
-                                    <h2 style={{color: "#686868"}}>Your bot messages</h2>
-                                </Col>
-                                <Col sm={12} md={6} className={'flexbox vcenter'}>
-                                    <a href={"https://my-treasurehunt.com/"} target={"_blank"}>
-                                        <Icon path={mdiInformationOutline} color={"#98be5d"} size={1} style={{margin:'auto 1em'}} className={"green"}/>
-                                        <span style={{color: "#999999", textDecoration: 'none !important'}}>Learn about the messages in the experience</span>
-                                    </a>
-                                </Col>
-                            </Row>
-                        </div>
-                        <div style={{marginBottom: '1em'}}>
-                            <FirstMessage onChange={this.updatePrefill} value={this.state.prefill.firstMessage}/>
-                            <span>Image with your first message (optional)</span><Icon path={mdiPlusCircle}
-                                                                                       size={1} color={"#111111"}
-                                                                                       style={{margin: ".5em"}}/>
-                        </div>
-                        <AnalysisMessage onChange={this.updatePrefill} value={this.state.prefill.analysisMessage}/>
-
-                        <NoMatchMessage onChange={this.updatePrefill} value={this.state.prefill.noMatchMessage}/>
-
-                        <FormGroup>
-                            {/*TODO: Recover images from step2*/}
-                            <Label for={"matchMessage1"}>Match Message *</Label>
-                            <br/>
-                            <span><Icon path={mdiImage} size={2} color={"#000000"}/> Image name</span>
-                            <Input type={"textarea"} id={"matchMessage1"} name={"matchMessage1"} required
-                                   placeholder={"The above image is matched. Send a message relative to this image. For sweepstake experience, do not forget to inform your user that his participation is then validated."}/>
-                        </FormGroup>
-
-                        <DefaultMessage onChange={this.updatePrefill} value={this.state.prefill.defaultMessage}/>
-
-                        <FinalMessage onChange={this.updatePrefill} value={this.state.prefill.finalMessage}/>
-
-                        <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
-                            <Button className={"NavigationButton NextButton greenBtn"} type={"submission"}>
-                                Next
-                                <Icon path={mdiSkipNext} size={1}/>
+                    <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
+                        <Button className={"NavigationButton NextButton greenBtn"} type={"submission"}>
+                            Next
+                            <Icon path={mdiSkipNext} size={1}/>
+                        </Button>
+                        <div style={{flexGrow: 1}}/>
+                        <Link to={{pathname: `step2`, state: {prefill: this.state.prefill}}}>
+                            <Button className={"NavigationButton BackButton greenBtn"}>
+                                Back
+                                <Icon path={mdiSkipPrevious} size={1}/>
                             </Button>
-                            <div style={{flexGrow: 1}}/>
-                            <Link to={{pathname: `step2`, state: {prefill: this.state.prefill}}}>
-                                <Button className={"NavigationButton BackButton greenBtn"}>
-                                    Back
-                                    <Icon path={mdiSkipPrevious} size={1}/>
-                                </Button>
-                            </Link>
-                        </div>
+                        </Link>
                     </div>
                 </Form>
             </div>
@@ -303,8 +259,9 @@ class PagesSection extends Component {
 
 class ChannelSection extends Component {
     static propTypes = {
-        prefillChannels: PropTypes.string.isRequired,
-        updateChannel: PropTypes.func.isRequired
+        prefill: PropTypes.object.isRequired,
+        updateChannel: PropTypes.func.isRequired,
+        onFieldChange: PropTypes.func.isRequired
     };
 
     ChannelButton = class extends Component {
@@ -326,7 +283,7 @@ class ChannelSection extends Component {
     };
 
     channelEnabled = (id) => {
-        return (this.props.prefillChannels !== undefined && this.props.prefillChannels[id] === true)
+        return (this.props.prefill.channels !== undefined && this.props.prefill.channels[id] === true)
     };
 
     render() {
@@ -354,16 +311,63 @@ class ChannelSection extends Component {
                 </Row>
                 <div className={"channelOptions"}>
                     {this.channelEnabled('messenger') &&
-                    <CollapsibleTitle>
-                        <h3 style={{fontSize: "1.5em"}}>Messenger attributes</h3>
-                        <div>Content</div>
-                    </CollapsibleTitle>}
+                    <MessengerOptions onChange={this.props.onFieldChange} prefill={this.props.prefill}/>}
                 </div>
             </div>
         );
     }
 
 }
+
+class MessengerOptionsComponent extends Component {
+    render() {
+        return (<CollapsibleTitle isOpen={true}>
+            <h3 style={{fontSize: "1.5em"}}>Messenger attributes</h3>
+            <div>
+                <PagesSection user={this.props.user} connect={this.connectBot}
+                              selectedPage={this.props.prefill.page}/>
+                <div style={{margin: '2rem auto'}}>
+                    <div>
+                        <Row>
+                            <Col sm={12} md={6}>
+                                <h2 style={{color: "#686868"}}>Your bot messages</h2>
+                            </Col>
+                            <Col sm={12} md={6} className={'flexbox vcenter'}>
+                                <a href={"https://my-treasurehunt.com/"} target={"_blank"}>
+                                    <Icon path={mdiInformationOutline} color={"#98be5d"} size={1} className={"green"}/>
+                                    <span style={{color: "#999999", textDecoration: 'none !important'}}>Learn about the messages in the experience</span>
+                                </a>
+                            </Col>
+                        </Row>
+                    </div>
+                    <div style={{marginBottom: '1em'}}>
+                        <FirstMessage onChange={this.props.onChange} value={this.props.prefill.firstMessage}/>
+                        <span>Image with your first message (optional)</span>
+                        <Icon path={mdiPlusCircle} size={1} color={"#111111"}/>
+                    </div>
+                    <AnalysisMessage onChange={this.props.onChange} value={this.props.prefill.analysisMessage}/>
+
+                    <NoMatchMessage onChange={this.props.onChange} value={this.props.prefill.noMatchMessage}/>
+
+                    <FormGroup>
+                        {/*TODO: Recover images from step2*/}
+                        <Label for={"matchMessage1"}>Match Message *</Label>
+                        <br/>
+                        <span><Icon path={mdiImage} size={2} color={"#000000"}/> Image name</span>
+                        <Input type={"textarea"} id={"matchMessage1"} name={"matchMessage1"} required
+                               placeholder={"The above image is matched. Send a message relative to this image. For sweepstake experience, do not forget to inform your user that his participation is then validated."}/>
+                    </FormGroup>
+
+                    <DefaultMessage onChange={this.props.onChange} value={this.props.prefill.defaultMessage}/>
+
+                    <FinalMessage onChange={this.props.onChange} value={this.props.prefill.finalMessage}/>
+                </div>
+            </div>
+        </CollapsibleTitle>)
+    }
+}
+
+const MessengerOptions = connect(stateToUserProps)(MessengerOptionsComponent);
 
 class FirstMessage extends Field {
     render() {
@@ -378,7 +382,6 @@ class FirstMessage extends Field {
         );
     }
 }
-
 
 class AnalysisMessage extends Field {
     render() {
@@ -435,6 +438,3 @@ class FinalMessage extends Field {
         );
     }
 }
-
-
-export default connect(stateToUserProps)(CampaignCreationStep3);
