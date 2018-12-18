@@ -29,9 +29,9 @@ class CampaignCreationStep1 extends Component {
 
     experienceSelect(id, active) {
         if (active)
-            this.setState({prefill: Object.assign(this.state.prefill, {experience: id})});
+            this.setState({prefill: Object.assign({},this.state.prefill, {experience: id})});
         else
-            this.setState({prefill: Object.assign(this.state.prefill, {experience: null})})
+            this.setState({prefill: Object.assign({},this.state.prefill, {experience: null})})
     }
 
     gameSelect(id) {

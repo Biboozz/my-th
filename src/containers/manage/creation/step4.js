@@ -239,10 +239,18 @@ class PrizeEntry extends Component {
     constructor(props) {
         super(props);
 
+        const prize = props.prize;
+        this.defaultValues = {
+            name: (prize && prize.name) ? props.prize.name : "",
+            description: (prize && prize.description) ? props.prize.description : "",
+            quantity: (prize && prize.quantity) ? props.prize.quantity : 0
+        };
+
         this.state = {
-            edit: false
+            edit: false,
+            values: this.defaultValues
         }
-    }
+    };
 
     handler = (event) => {
         event.preventDefault();
@@ -250,6 +258,18 @@ class PrizeEntry extends Component {
         this.setState({edit: !this.state.edit});
     };
 
+    resetForm = () => {
+        debugger;
+        this.setState({edit: false, values: this.defaultValues})
+    };
+
+    onChange = (event, id) => {
+        this.setState({
+            values: produce(this.state.values, (draft) => {
+                draft[id] = event.target.value
+            })
+        })
+    };
 
     //TODO: FIX DAT SHIT TO RESET FORM!
     getButtons = () => {
@@ -260,7 +280,7 @@ class PrizeEntry extends Component {
                         <Icon path={mdiCheck} size={1} key={"editBtn"}/>
                     </Button>
                     <Button style={{margin: 'auto .2em'}} className={"roundBtn small"} color={"danger"} outline
-                            onClick={() => {this.setState({edit: false});   this.myFormRef.reset();}}>
+                            onClick={this.resetForm}>
                         <Icon path={mdiClose} size={1} key={"deleteBtn"}/>
                     </Button>
                 </div>);
@@ -295,21 +315,17 @@ class PrizeEntry extends Component {
     };
 
     render() {
-        let prefill = {name: null, description: null, quantity: null};
-        if (this.props.prize) {
-            prefill = Object.assign(prefill, this.props.prize);
-        }
-        console.log("render:", prefill.name);
         return (
             <div style={{marginBottom: '2rem'}}>
-                <Form onSubmit={this.handler} ref={(el) => this.myFormRef = el}>
+                <Form onSubmit={this.handler} ref={(el) => this.myForm = el}>
                     <Row form>
                         <Col sm={6} md={4}>
                             <FormGroup>
                                 <Label for={"lotName"}>Name *</Label>
                                 <Input id={"lotName"} name={"lotName"} required style={{height: '4em'}}
                                        disabled={this.disableField('name')}
-                                       defaultValue={prefill.name}/>
+                                       onChange={(event) => this.onChange(event, 'name')}
+                                       value={this.state.values.name}/>
                             </FormGroup>
                         </Col>
                         <Col sm={6} md={4}>
@@ -318,7 +334,8 @@ class PrizeEntry extends Component {
                                 <Input type="textarea" id={"lotDescription"} name={"lotDescription"} required
                                        disabled={this.disableField('description')}
                                        style={{height: '4em', resize: 'none'}}
-                                       defaultValue={prefill.description}
+                                       onChange={(event) => this.onChange(event, 'description')}
+                                       value={this.state.values.description}
                                        placeholder={"You can re-use this field as the variable [shortdescription] in the prize win message"}/>
                             </FormGroup>
                         </Col>
@@ -328,7 +345,8 @@ class PrizeEntry extends Component {
                                 <Input type="number" id={"lotQuantity"} name={"lotQuantity"} required
                                        disabled={this.disableField('quantity')}
                                        style={{height: '4em'}}
-                                       defaultValue={prefill.quantity === null ? 0 : prefill.quantity}/>
+                                       onChange={(event) => this.onChange(event, 'quantity')}
+                                       value={this.state.values.quantity}/>
                             </FormGroup>
                         </Col>
                         <Col sm={12} md={2} lg={3}>

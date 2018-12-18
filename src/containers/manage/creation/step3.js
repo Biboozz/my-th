@@ -93,7 +93,7 @@ export default class CampaignCreationStep3 extends Component {
                 <Summary prefill={this.state.prefill} fields={['name', 'game', 'status']}/>
                 <Form onSubmit={this.handleSubmit}>
 
-                    <ChannelSection updateChannel={this.toggleChannel} prefill={this.state.prefill} onFieldChange={this.updatePrefill}/>
+                    <ChannelSection updateChannel={this.toggleChannel} prefill={this.state.prefill} onFieldChange={this.updatePrefill} connectBot={this.connectBot}/>
 
                     <div style={{display: 'flex', flexFlow: "row-reverse nowrap"}}>
                         <Button className={"NavigationButton NextButton greenBtn"} type={"submission"}>
@@ -311,7 +311,7 @@ class ChannelSection extends Component {
                 </Row>
                 <div className={"channelOptions"}>
                     {this.channelEnabled('messenger') &&
-                    <MessengerOptions onChange={this.props.onFieldChange} prefill={this.props.prefill}/>}
+                    <MessengerOptions onChange={this.props.onFieldChange} prefill={this.props.prefill} connectBot={this.props.connectBot}/>}
                 </div>
             </div>
         );
@@ -324,7 +324,7 @@ class MessengerOptionsComponent extends Component {
         return (<CollapsibleTitle isOpen={true}>
             <h3 style={{fontSize: "1.5em"}}>Messenger attributes</h3>
             <div>
-                <PagesSection user={this.props.user} connect={this.connectBot}
+                <PagesSection user={this.props.user} connect={this.props.connectBot}
                               selectedPage={this.props.prefill.page}/>
                 <div style={{margin: '2rem auto'}}>
                     <div>
