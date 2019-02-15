@@ -34,8 +34,7 @@ class LoginPage extends Component {
                         <p className={"baitDisplay"}>Create Awesome <b>fun-bots</b> on Messenger ! No coding
                             and <b>Free</b>
                         </p>
-                        <p className={"description"}>Engage your audience in real life through treasure hunt, course,
-                            vote,
+                        <p className={"description"}>Engage your audience in real life through treasure hunt, vote,
                             race, instant win or sweepstake. Enrich your visuals now ! </p>
                         <Row>
                             {!this.props.user.isAuthenticated
