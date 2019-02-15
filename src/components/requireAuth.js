@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {stateToUserProps} from "../reducers/user";
 import {withRouter} from "react-router-dom";
 import {urls} from "../config";

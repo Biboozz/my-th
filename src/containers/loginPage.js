@@ -20,10 +20,6 @@ class LoginPage extends Component {
         this.props.history.push(values.next ? values.next : "/");
     };
 
-    connectionError(e) {
-        console.error(e);
-    }
-
     render() {
         return (
             <div style={{display: 'flex'}}>

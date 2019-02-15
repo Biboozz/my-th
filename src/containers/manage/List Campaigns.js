@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
+import {Button, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
 import {Icon} from '@mdi/react'
-import {mdiFacebookMessenger, mdiTwitter, mdiEmail, mdiAlert, mdiPen, mdiTrashCan} from '@mdi/js'
+import {mdiAlert, mdiEmail, mdiFacebookMessenger, mdiPen, mdiTrashCan, mdiTwitter} from '@mdi/js'
 
 import Campaign, {InterfaceTypes} from "../../classes/Campaign";
 

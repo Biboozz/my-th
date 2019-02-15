@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types'
 import {Icon} from '@mdi/react'
 import {mdiSkipNext, mdiSkipPrevious} from '@mdi/js'
 import {Link, Redirect} from "react-router-dom";
@@ -11,9 +10,8 @@ import '../../../styles/campaignCreation/step2.css'
 import '../../../styles/utils.css'
 import {mdiImagePlus} from "@mdi/js/commonjs/mdi";
 import produce from "immer";
-import {SummaryGame, SummaryStatus} from "./components/summary";
-import Field from "./components/FieldGenericClass";
 import Summary from "./components/summary";
+import Field from "./components/FieldGenericClass";
 
 class CampaignCreationStep2 extends Component {
 
@@ -109,10 +107,6 @@ class CampaignCreationStep2 extends Component {
 }
 
 class BotName extends Field {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div>

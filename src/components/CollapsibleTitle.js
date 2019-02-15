@@ -7,7 +7,7 @@ import "../styles/CollapsibleTitle.css"
 import "../styles/separator.css"
 import "../styles/utils.css"
 
-import {Badge, Collapse} from "reactstrap";
+import {Collapse} from "reactstrap";
 
 class CollapsibleTitle extends Component {
     constructor(props) {

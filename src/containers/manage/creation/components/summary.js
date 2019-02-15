@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {FormGroup, Label, Input, Row, Col} from "reactstrap";
+import {Col, FormGroup, Input, Label, Row} from "reactstrap";
 import {Icon} from '@mdi/react'
-import {mdiFacebookMessenger, mdiTwitter, mdiEmail} from '@mdi/js'
+import {mdiEmail, mdiFacebookMessenger, mdiTwitter} from '@mdi/js'
 
 export default class Summary extends Component {
     static propTypes = {prefill: PropTypes.any.isRequired, fields: PropTypes.arrayOf(PropTypes.string)}

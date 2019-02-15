@@ -3,32 +3,15 @@ import PropTypes from 'prop-types';
 import {Alert, Button, Col, Form, FormGroup, Input, Label, Row} from "reactstrap";
 import {Link} from "react-router-dom";
 import {Icon} from '@mdi/react'
-import {
-    mdiAlert,
-    mdiAlertCircle, mdiCheck,
-    mdiImagePlus,
-    mdiInformationVariant,
-    mdiPen,
-    mdiPlus,
-    mdiSkipNext,
-    mdiSkipPrevious
-} from '@mdi/js'
+import {mdiAlert, mdiCheck, mdiImagePlus, mdiInformationVariant, mdiPen, mdiPlus, mdiSkipPrevious} from '@mdi/js'
 
 import '../../../styles/campaignCreation/global.css'
 import '../../../styles/campaignCreation/step4.css'
 import produce from "immer";
 import SwitchButton from "../../../components/switch";
 import Field from "./components/FieldGenericClass";
-import {BotNameSummary, ChannelsSummary, SummaryGame, SummaryStatus} from "./components/summary";
 import Summary from "./components/summary";
 import {mdiClose, mdiTrashCan} from "@mdi/js/commonjs/mdi";
-
-function extractValue(dict, key, elseRet = null) {
-    if (dict && key in dict) {
-        return dict['key']
-    }
-    return elseRet
-}
 
 //TODO: Work for sm and md
 export default class CampaignCreationStep4 extends Component {

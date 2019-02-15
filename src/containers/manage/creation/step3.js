@@ -9,7 +9,9 @@ import Spinner from 'react-spinner-material';
 import {Icon} from '@mdi/react'
 import {
     mdiEmail,
-    mdiFacebookMessenger, mdiImage, mdiInformationOutline,
+    mdiFacebookMessenger,
+    mdiImage,
+    mdiInformationOutline,
     mdiPlusCircle,
     mdiRobot,
     mdiSkipNext,
@@ -29,10 +31,6 @@ import User from "../../../classes/User";
 import CollapsibleTitle from "../../../components/CollapsibleTitle";
 import Summary from "./components/summary";
 import Field from "./components/FieldGenericClass";
-
-const testAssociation = [
-    {name: "Test1", cover: "https://picsum.photos/500/500/?image=1063", id: "idTest1"},
-    {name: "Test2", cover: "https://picsum.photos/500/500/?image=598", id: "idTest2"}];
 
 export default class CampaignCreationStep3 extends Component {
 
@@ -242,7 +240,7 @@ class PagesSection extends Component {
                 {!(this.state.associationList && this.state.fetchedPages === this.state.associationList.length) ?
                     <div style={{alignItems: 'center', textAlign: "center"}}>
                         <span style={{margin: 'auto'}}>{this.state.loadingBarStatus.message}</span>
-                        <Progress animated={this.state.loadingBarStatus.color != 'danger'}
+                        <Progress animated={this.state.loadingBarStatus.color !== 'danger'}
                                   value={this.state.loadingBarStatus.value}
                                   color={this.state.loadingBarStatus.color}
                                   style={{margin: "2em auto", width: "50%"}}/>

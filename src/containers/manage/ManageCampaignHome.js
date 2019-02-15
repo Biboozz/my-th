@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Icon} from '@mdi/react'
-import {mdiPlus, mdiWorker} from "@mdi/js";
+import {mdiPlus} from "@mdi/js";
 import {Container} from "reactstrap";
 
 import {CampaignStartList} from "../../classes/Campaign";
