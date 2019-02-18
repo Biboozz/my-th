@@ -21,8 +21,10 @@ class ManageCampaignHome extends Component {
                         <h2 style={{margin: '0'}}>Your fun bots</h2>
                         <Link to={`${this.props.location.pathname}/create`}>
                             <BigButton className={"greenBtn"}>
-                                <Icon path={mdiPlus} size={1} style={{marginRight: "1rem"}}/>
-                                Create new
+                                <div style={{width: "100%", height: "100%"}} className={"flexbox"}>
+                                    <Icon path={mdiPlus} size={1} style={{marginRight: ".5rem"}}/>
+                                    <span style={{margin: "auto 0"}}>Create new</span>
+                                </div>
                             </BigButton>
                         </Link>
                     </div>
